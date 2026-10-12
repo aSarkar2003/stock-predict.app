@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: stock_predict_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${PGUSER_ADMIN:-postgres}
+      POSTGRES_PASSWORD: ${PGPASSWORD_ADMIN:-admin}
+      POSTGRES_DB: ${PGDATABASE:-stock_predict}
+    ports:
+      - "${PGPORT:-5432}:5432"
+    volumes:
+      - stock_predict_pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGUSER_ADMIN:-postgres} -d ${PGDATABASE:-stock_predict}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  stock_predict_pgdata:
+    name: stock_predict_pgdata
+
