@@ -14,23 +14,27 @@ Execution progress log for STOCK&PREDICT phases.
 - Tests: 10 passed
 
 ## Phase 2: Historical Stock-Data Ingestion
-- Objective: Build a reliable, idempotent ingestion pipeline that retrieves daily historical data from yfinance, validates it, and stores it in PostgreSQL.
+- Status: COMPLETED
+- Tag: `v0.3.0` (commit `e4101e7`)
+- Tests: 16 passed
+
+## Phase 3: Immutable Prediction Ledger
+- Objective: Create a trustworthy, auditable, immutable ledger for stock-direction predictions.
 - Files to create/update:
-  - `db/migrations/005_ingestion_queue.sql` (`ingestion_reject`, `job_queue`, `fn_split_multiplier`)
-  - `ingest/providers/base.py`
-  - `ingest/providers/yfinance_provider.py`
-  - `ingest/validate.py`
-  - `ingest/pipeline.py`
-  - `ingest/worker.py`
-  - `tests/integration/test_phase2.py`
-  - `VERSION` -> 0.3.0
-- Gate 2 Acceptance:
-  - Migration 005 applied idempotently.
-  - Idempotency test (re-ingesting existing date ranges does not produce duplicates).
-  - Rejected-row recording into `ingestion_reject` with clear reason.
-  - Transaction rollback on failed runs (no partial corrupt states).
-  - Split multiplier calculation verified (`fn_split_multiplier`).
-  - Stock splits handled correctly so valid price changes aren't falsely rejected.
-  - Concurrent job claiming using `FOR UPDATE SKIP LOCKED`.
-  - Backfill executed for seeded tickers.
+  - `db/migrations/007_ledger.sql`
+  - `ml/features.py`
+  - `ml/models/naive_last.py`
+  - `ml/models/drift.py`
+  - `ml/predict.py`
+  - `tests/integration/test_phase3.py`
+  - `VERSION` -> 0.4.0
+- Gate 3 Acceptance:
+  - Migration 007 applied idempotently.
+  - Valid prediction insertion passes.
+  - Invalid prediction rejection (target date <= prediction date, close outside bounds).
+  - Horizon check (1, 5, 21 only) and probability_up [0, 1] enforced.
+  - UPDATE forbidden trigger blocks updates.
+  - DELETE forbidden trigger blocks deletes.
+  - TRUNCATE forbidden by role revocation.
+  - Baseline predictions generated and verified readable from PostgreSQL.
 - Status: IN PROGRESS

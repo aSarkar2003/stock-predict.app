@@ -5,6 +5,36 @@ All notable changes to STOCK&PREDICT are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-10-12
+
+[![Version](https://img.shields.io/badge/version-0.4.0-blue)](https://github.com/atanu-sarkar/stock-predict-app/releases/tag/v0.4.0)
+[![Phase](https://img.shields.io/badge/phase-3-brightgreen)](https://github.com/atanu-sarkar/stock-predict-app)
+
+### Added
+- Phase 3: Immutable Prediction Ledger.
+- Database migration `007_ledger.sql`:
+  - `prediction` table supporting multi-ticker, multi-model forecasts with horizons 1, 5, and 21 trading days.
+  - Direction classification (`UP`, `DOWN`, `FLAT`) and prediction intervals (`lower_bound`, `upper_bound`, `probability_up`).
+  - Validation trigger `tg_validate_prediction`: Enforces strictly forward target dates (`target_date > prediction_date`) and bounds inclusion (`lower_bound <= predicted_close <= upper_bound`).
+  - Immutability trigger `tg_forbid_prediction_mutation`: Completely forbids `UPDATE` and `DELETE` operations.
+  - Role-level `REVOKE UPDATE, DELETE, TRUNCATE` on prediction table from `app_rw`, `app_ro`, and `PUBLIC`.
+- Feature engineering and baseline models:
+  - `ml/features.py`: Computes logarithmic returns and classifies directional labels (`UP`, `DOWN`, `FLAT`).
+  - `ml/models/naive_last.py`: Implements "tomorrow = today" random-walk baseline model.
+  - `ml/models/drift.py`: Implements linear drift model with volatility bands.
+  - `ml/predict.py`: End-to-end prediction generation ensuring zero look-ahead data leakage by strictly evaluating data prior to `as_of_date`.
+- Comprehensive test suite in `tests/integration/test_phase3.py` verifying all 7 acceptance checks.
+
+### Validation
+- Valid predictions inserted and verified in PostgreSQL.
+- Invalid predictions rejected (past dates, invalid intervals, out-of-bounds prices).
+- Attempted mutations (`UPDATE`, `DELETE`, `TRUNCATE`) proven rejected by database engine.
+- Baseline models executed and written to ledger without hindsight bias.
+- 23 passed tests across test suite.
+
+### Git
+- Release tag: `v0.4.0`
+
 ## [0.3.0] - 2026-10-12
 
 [![Version](https://img.shields.io/badge/version-0.3.0-blue)](https://github.com/atanu-sarkar/stock-predict-app/releases/tag/v0.3.0)
