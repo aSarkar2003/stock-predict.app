@@ -5,6 +5,19 @@ All notable changes to STOCK&PREDICT are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2026-10-12
+
+[![Version](https://img.shields.io/badge/version-0.5.1-blue)](https://github.com/atanu-sarkar/stock-predict-app/releases/tag/v0.5.1)
+[![License](https://img.shields.io/badge/license-AGPL--3.0--only-orange)](LICENSE)
+
+### Added
+- Repository finalized under the official GNU Affero General Public License v3.0 only (`AGPL-3.0-only`).
+- Canonical license text added to root `LICENSE`.
+- Project license metadata and documentation updated in `README.md`.
+
+### Git
+- Release tag: `v0.5.1`
+
 ## [0.5.0] - 2026-10-12
 
 [![Version](https://img.shields.io/badge/version-0.5.0-blue)](https://github.com/atanu-sarkar/stock-predict-app/releases/tag/v0.5.0)
