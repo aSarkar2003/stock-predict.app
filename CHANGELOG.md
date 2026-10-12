@@ -5,6 +5,40 @@ All notable changes to STOCK&PREDICT are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-10-12
+
+[![Version](https://img.shields.io/badge/version-0.3.0-blue)](https://github.com/atanu-sarkar/stock-predict-app/releases/tag/v0.3.0)
+[![Phase](https://img.shields.io/badge/phase-2-brightgreen)](https://github.com/atanu-sarkar/stock-predict-app)
+
+### Added
+- Phase 2: Historical Stock-Data Ingestion.
+- Database migration `005_ingestion_queue.sql`:
+  - `ingestion_reject` table for tracking rejected/malformed rows with failure rationale.
+  - `job_queue` table with status tracking (`PENDING`, `PROCESSING`, `COMPLETED`, `FAILED`).
+  - Stored function `fn_split_multiplier(ticker_id, as_of_date)` for cumulative stock split adjustment.
+- Data ingestion layer:
+  - `ingest/providers/base.py`: Abstract provider interface.
+  - `ingest/providers/yfinance_provider.py`: Yahoo Finance provider supporting NSE (`.NS`) and BSE (`.BO`) tickers.
+  - `ingest/validate.py`: Robust OHLC ordering and non-negative volume validation.
+  - `ingest/pipeline.py`: Transactional ingestion with automatic upsert into partitioned `stock_price` and reject recording.
+  - `ingest/worker.py`: Background job worker with concurrency safety using PostgreSQL `FOR UPDATE SKIP LOCKED`.
+  - `ingest/backfill.py`: Resumable backfill utility.
+- Integration tests in `tests/integration/test_phase2.py`:
+  - Validation rules for negative values and OHLC consistency.
+  - Ingestion idempotency.
+  - Rejection logging.
+  - Cumulative split factor calculation.
+  - Atomic job queue claiming and processing.
+
+### Validation
+- Ingestion idempotency verified (re-ingesting identical dates causes zero duplicates).
+- Split-multiplier function verified.
+- Initial backfill executed against Yahoo Finance for NSE equities.
+- 16 passed tests across full test suite.
+
+### Git
+- Release tag: `v0.3.0`
+
 ## [0.2.0] - 2026-10-12
 
 [![Version](https://img.shields.io/badge/version-0.2.0-blue)](https://github.com/atanu-sarkar/stock-predict-app/releases/tag/v0.2.0)
