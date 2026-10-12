@@ -31,3 +31,4 @@ CREATE TABLE IF NOT EXISTS backtest_result (
     sample_size INT NOT NULL CHECK (sample_size > 0),
     evaluated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+

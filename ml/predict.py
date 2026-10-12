@@ -4,6 +4,11 @@ import pandas as pd
 from app.db import get_db_connection
 from ml.models.naive_last import NaiveLastModel
 from ml.models.drift import DriftModel
+from ml.models.ann_model import ANNModel
+from ml.models.lstm_model import LSTMModel
+from ml.models.transformer_model import TransformerModel
+from ml.models.ensemble_model import EnsembleModel
+from ml.models.prophet_model import ProphetForecaster, PROPHET_AVAILABLE
 
 
 def get_target_trading_date(start_date: datetime.date, horizon_days: int) -> datetime.date:
@@ -84,6 +89,23 @@ def generate_and_persist_prediction(
             """, (ticker_id, as_of_date))
             rows = cur.fetchall()
 
+            # If no rows found <= as_of_date (e.g. as_of_date is in the future relative to stored dataset),
+            # use latest available historical observation date as the cutoff
+            if not rows:
+                cur.execute("""
+                    SELECT MAX(price_date) FROM stock_price WHERE ticker_id = %s;
+                """, (ticker_id,))
+                max_date = cur.fetchone()[0]
+                if max_date:
+                    as_of_date = max_date
+                    cur.execute("""
+                        SELECT price_date, open_price, high_price, low_price, close_price, volume
+                        FROM stock_price
+                        WHERE ticker_id = %s AND price_date <= %s
+                        ORDER BY price_date ASC;
+                    """, (ticker_id, as_of_date))
+                    rows = cur.fetchall()
+
     if not rows:
         raise ValueError(f"No price history available for {ticker_symbol} as of {as_of_date}.")
 
@@ -95,6 +117,16 @@ def generate_and_persist_prediction(
         forecast = NaiveLastModel().predict(df, horizon_days)
     elif model_name == "drift":
         forecast = DriftModel().predict(df, horizon_days)
+    elif model_name == "ann":
+        forecast = ANNModel().predict(df, horizon_days)
+    elif model_name == "lstm":
+        forecast = LSTMModel().predict(df, horizon_days)
+    elif model_name == "transformer":
+        forecast = TransformerModel().predict(df, horizon_days)
+    elif model_name == "ensemble":
+        forecast = EnsembleModel().predict(df, horizon_days)
+    elif model_name == "prophet":
+        forecast = ProphetForecaster().fit_and_predict(df, horizon_days)
     else:
         raise NotImplementedError(f"Model {model_name} not recognized.")
 

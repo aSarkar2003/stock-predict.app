@@ -141,6 +141,97 @@ elif menu == "Predictions Ledger":
             st.info(f"Resolved {count} pending predictions.")
 
     st.divider()
+    st.markdown("### 📊 Multi-Model & Ensemble Prediction Visualizer")
+    col_chart_sym, col_chart_h = st.columns(2)
+    chart_symbol = col_chart_sym.selectbox("Compare Forecasts For Symbol", symbols, key="compare_sym")
+    chart_horizon = col_chart_h.selectbox("Forecast Horizon", [1, 5, 21], key="compare_h")
+
+    if st.button("Generate Multi-Model Comparison Chart"):
+        with st.spinner("Evaluating models (ANN, LSTM, Transformer, Prophet, Ensemble)..."):
+            from ml.models.ensemble_model import EnsembleModel
+            with get_ro_connection() as conn:
+                df_hist = pd.read_sql_query("""
+                    SELECT price_date, close_price FROM stock_price sp
+                    JOIN stock_ticker st ON sp.ticker_id = st.ticker_id
+                    WHERE st.symbol = %s ORDER BY price_date ASC;
+                """, conn, params=(chart_symbol,))
+
+            if len(df_hist) >= 30:
+                ens = EnsembleModel()
+                all_preds = ens.predict_all(df_hist, horizon_days=chart_horizon)
+                ens_pred = ens.predict(df_hist, horizon_days=chart_horizon)
+                all_preds["ensemble"] = ens_pred
+
+                last_date = df_hist.iloc[-1]["price_date"]
+                last_price = float(df_hist.iloc[-1]["close_price"])
+
+                # Create comparison figure
+                comp_fig = go.Figure()
+                # Recent history line
+                comp_fig.add_trace(go.Scatter(
+                    x=df_hist["price_date"].tail(30),
+                    y=df_hist["close_price"].tail(30),
+                    mode="lines+markers",
+                    name="Recent Observed Close",
+                    line=dict(color="#1f77b4", width=3),
+                ))
+
+                colors = {
+                    "naive_last": "#7f7f7f",
+                    "drift": "#bcbd22",
+                    "ann": "#ff7f0e",
+                    "lstm": "#2ca02c",
+                    "transformer": "#9467bd",
+                    "ensemble": "#d62728",
+                }
+
+                # Add each model forecast
+                proj_x = [last_date, last_date + datetime.timedelta(days=chart_horizon * 2)]
+                for m_k, p_res in all_preds.items():
+                    c = colors.get(m_k, "#17becf")
+                    w = 4 if m_k == "ensemble" else 2
+                    comp_fig.add_trace(go.Scatter(
+                        x=proj_x,
+                        y=[last_price, p_res["predicted_close"]],
+                        mode="lines+markers",
+                        name=f"{m_k.upper()} ({p_res['predicted_direction']}: ₹{p_res['predicted_close']})",
+                        line=dict(color=c, width=w, dash="solid" if m_k == "ensemble" else "dot"),
+                    ))
+
+                # Add Ensemble Confidence Interval Band
+                comp_fig.add_trace(go.Scatter(
+                    x=[proj_x[1], proj_x[1]],
+                    y=[ens_pred["lower_bound"], ens_pred["upper_bound"]],
+                    mode="lines",
+                    name="Ensemble Bounds [Lower, Upper]",
+                    line=dict(color="rgba(214, 39, 40, 0.5)", width=6),
+                ))
+
+                comp_fig.update_layout(
+                    title=f"{chart_symbol} — Multi-Model & Ensemble Direction Projections (Horizon: {chart_horizon}d)",
+                    yaxis_title="Price (INR)",
+                    xaxis_title="Timeline",
+                    hovermode="x unified",
+                    height=500,
+                )
+                st.plotly_chart(comp_fig, use_container_width=True)
+
+                # Summary metrics table
+                summary_data = []
+                for m_k, p_res in all_preds.items():
+                    summary_data.append({
+                        "Model": m_k.upper(),
+                        "Predicted Close": f"₹{p_res['predicted_close']:.2f}",
+                        "Expected Return": f"{p_res['predicted_log_return'] * 100:.3f}%",
+                        "Direction": p_res["predicted_direction"],
+                        "Probability UP": f"{p_res['probability_up'] * 100:.1f}%",
+                        "Interval [Lower - Upper]": f"₹{p_res['lower_bound']:.2f} - ₹{p_res['upper_bound']:.2f}",
+                    })
+                st.table(pd.DataFrame(summary_data))
+            else:
+                st.warning(f"Insufficient history for {chart_symbol} to fit deep learning models.")
+
+    st.divider()
     st.markdown("### Ledger Records")
     with get_ro_connection() as conn:
         df_ledger = pd.read_sql_query("""
