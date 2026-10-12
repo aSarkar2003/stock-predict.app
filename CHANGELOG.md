@@ -5,6 +5,38 @@ All notable changes to STOCK&PREDICT are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-10-12
+
+[![Version](https://img.shields.io/badge/version-0.5.0-blue)](https://github.com/atanu-sarkar/stock-predict-app/releases/tag/v0.5.0)
+[![Phase](https://img.shields.io/badge/phase-4-purple)](https://github.com/atanu-sarkar/stock-predict-app)
+
+### Added
+- Phase 4: Outcome Resolution and Model Scorecards.
+- Migrations `009_resolution.sql` and `010_scorecards.sql`:
+  - `prediction_outcome` table recording realized values, absolute error, squared error, log loss, and direction correctness.
+  - Immutability trigger `tg_forbid_outcome_mutation` and `REVOKE UPDATE, DELETE, TRUNCATE` on outcomes.
+  - Stored function `fn_resolve_predictions` with auto-resolution trigger `tg_run_done_auto_resolve` executed upon ingestion run completion.
+  - `v_pending_predictions` view joining unresolved forecasts with target prices.
+  - Materialized view `mv_model_scorecard` with sample size, directional accuracy, MAE, RMSE, mean log loss, paired baseline accuracy, skill score, and human-readable verdict.
+  - Unique index `idx_mv_model_scorecard_pk` on `(model_id, version_id, ticker_id, horizon_days)`.
+- Core analytical and resolution modules:
+  - `ml/resolve.py`: Resolution management.
+  - `ml/scorecards.py`: Scorecard materialized view management and independent pandas metric verification.
+  - `ml/models/prophet_model.py`: Experimental Facebook Prophet integration strictly fitting on historical observations.
+  - `docs/ml_methodology.md`: Full quantitative methodology and benchmark documentation.
+  - `streamlit_app.py`: Full interactive Streamlit UI covering Dashboard, Stock Explorer, Prediction Ledger, Model Scorecards, and Ingestion management.
+- Integration tests in `tests/integration/test_phase4.py` verifying prediction grading, outcome immutability, auto-resolution triggers, SQL-vs-pandas cross-check, and Prophet forecasting.
+
+### Validation
+- Auto-resolution trigger and idempotent batch resolution verified.
+- Outcome immutability confirmed against unauthorized UPDATE/DELETE operations.
+- Independent pandas calculation mathematically verified matching SQL materialized view within $10^{-3}$ tolerance.
+- Prophet model verified fitting on historical prices without data leakage.
+- All 28 tests passing across test suites.
+
+### Git
+- Release tag: `v0.5.0`
+
 ## [0.4.0] - 2026-10-12
 
 [![Version](https://img.shields.io/badge/version-0.4.0-blue)](https://github.com/atanu-sarkar/stock-predict-app/releases/tag/v0.4.0)

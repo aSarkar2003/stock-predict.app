@@ -19,22 +19,29 @@ Execution progress log for STOCK&PREDICT phases.
 - Tests: 16 passed
 
 ## Phase 3: Immutable Prediction Ledger
-- Objective: Create a trustworthy, auditable, immutable ledger for stock-direction predictions.
+- Status: COMPLETED
+- Tag: `v0.4.0` (commit `c081242`)
+- Tests: 23 passed
+
+## Phase 4: Outcome Resolution and Model Scorecards
+- Objective: Resolve historical predictions against actual observations, calculate scorecards, cross-check metrics against pandas, integrate Prophet experimental model, and provide interactive Streamlit dashboard.
 - Files to create/update:
-  - `db/migrations/007_ledger.sql`
-  - `ml/features.py`
-  - `ml/models/naive_last.py`
-  - `ml/models/drift.py`
-  - `ml/predict.py`
-  - `tests/integration/test_phase3.py`
-  - `VERSION` -> 0.4.0
-- Gate 3 Acceptance:
-  - Migration 007 applied idempotently.
-  - Valid prediction insertion passes.
-  - Invalid prediction rejection (target date <= prediction date, close outside bounds).
-  - Horizon check (1, 5, 21 only) and probability_up [0, 1] enforced.
-  - UPDATE forbidden trigger blocks updates.
-  - DELETE forbidden trigger blocks deletes.
-  - TRUNCATE forbidden by role revocation.
-  - Baseline predictions generated and verified readable from PostgreSQL.
+  - `db/migrations/009_resolution.sql` (`prediction_outcome`, `fn_resolve_predictions`, `tg_run_done_auto_resolve`, `v_pending_predictions`)
+  - `db/migrations/010_scorecards.sql` (`mv_model_scorecard`, unique index, grants)
+  - `ml/resolve.py`
+  - `ml/scorecards.py`
+  - `ml/models/prophet_model.py`
+  - `docs/ml_methodology.md`
+  - `streamlit_app.py`
+  - `tests/integration/test_phase4.py`
+  - `VERSION` -> 0.5.0
+- Gate 4 Acceptance:
+  - Migrations 009 and 010 applied cleanly.
+  - Correct resolution of predictions into `prediction_outcome`.
+  - Idempotent resolution and immutability of outcomes.
+  - Auto-resolution trigger on ingestion completion.
+  - Scorecard materialized view refresh and unique index.
+  - Independent pandas calculation agrees with SQL metrics within tolerance.
+  - Prophet model fitting on historical observations without leakage.
+  - Streamlit dashboard connected to database.
 - Status: IN PROGRESS
