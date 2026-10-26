@@ -1,5 +1,6 @@
 import json
 import datetime
+import math
 from typing import Dict, Any, List, Optional
 import psycopg
 from app.db import get_db_connection
@@ -50,13 +51,14 @@ class IngestionPipeline:
                 with conn.cursor() as cur:
                     for ca in corp_actions:
                         cur.execute("""
-                            INSERT INTO corporate_action (ticker_id, ex_date, action_type, ratio, amount)
-                            VALUES (%s, %s, %s, %s, %s)
-                            ON CONFLICT DO NOTHING;
-                        """, (ticker_id, ca["ex_date"], ca["action_type"], ca["ratio"], ca.get("amount")))
+                            INSERT INTO corporate_action (ticker_id, action_date, action_type, split_ratio)
+                            VALUES (%s, %s, %s, %s)
+                            ON CONFLICT (ticker_id, action_date, action_type) DO UPDATE
+                            SET split_ratio = EXCLUDED.split_ratio;
+                        """, (ticker_id, ca["date"], ca["type"], ca.get("split_ratio")))
 
-                # 4. Fetch market data
-                raw_records = self.provider.fetch_daily_ohlcv(symbol, start_date, end_date, exchange)
+                # 4. Fetch daily OHLCV
+                raw_records = self.provider.fetch_daily_ohlcv(symbol, start_date, end_date)
                 ingested_count = 0
                 rejected_count = 0
 
@@ -89,6 +91,14 @@ class IngestionPipeline:
                             ))
                             ingested_count += 1
                         else:
+                            # Sanitize payload for PostgreSQL JSON (replace NaNs with None)
+                            clean_rec = {}
+                            for k, v in rec.items():
+                                if isinstance(v, float) and math.isnan(v):
+                                    clean_rec[k] = None
+                                else:
+                                    clean_rec[k] = v
+
                             # Insert into ingestion_reject
                             cur.execute("""
                                 INSERT INTO ingestion_reject (
@@ -99,7 +109,7 @@ class IngestionPipeline:
                                 run_id,
                                 ticker_id,
                                 rec.get("date"),
-                                json.dumps(rec, default=str),
+                                json.dumps(clean_rec, default=str),
                                 reason,
                             ))
                             rejected_count += 1
@@ -127,13 +137,17 @@ class IngestionPipeline:
                 }
 
             except Exception as e:
-                # Mark run as FAILED before rolling back or recording
-                with conn.cursor() as cur:
-                    cur.execute("""
-                        UPDATE ingestion_run
-                        SET status = 'FAILED',
-                            error_message = %s,
-                            completed_at = CURRENT_TIMESTAMP
-                        WHERE run_id = %s;
-                    """, (str(e), run_id))
+                try:
+                    conn.rollback()
+                    with conn.cursor() as cur:
+                        cur.execute("""
+                            UPDATE ingestion_run
+                            SET status = 'FAILED',
+                                error_message = %s,
+                                completed_at = CURRENT_TIMESTAMP
+                            WHERE run_id = %s;
+                        """, (str(e), run_id))
+                        conn.commit()
+                except Exception:
+                    pass
                 raise e

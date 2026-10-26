@@ -1,5 +1,6 @@
 from typing import Dict, Any, Tuple
 import datetime
+import math
 
 
 def validate_ohlcv_record(record: Dict[str, Any]) -> Tuple[bool, str | None]:
@@ -20,11 +21,18 @@ def validate_ohlcv_record(record: Dict[str, Any]) -> Tuple[bool, str | None]:
         except Exception:
             return False, f"Invalid date format: {obs_date}"
 
-    open_p = float(record["open"])
-    high_p = float(record["high"])
-    low_p = float(record["low"])
-    close_p = float(record["close"])
-    volume = int(record["volume"])
+    try:
+        open_p = float(record["open"])
+        high_p = float(record["high"])
+        low_p = float(record["low"])
+        close_p = float(record["close"])
+        volume = int(record["volume"])
+    except (ValueError, TypeError):
+        return False, "Non-numeric values in OHLCV"
+
+    # Reject NaNs (e.g. today's unfinished bar where close is NaN)
+    if math.isnan(open_p) or math.isnan(high_p) or math.isnan(low_p) or math.isnan(close_p):
+        return False, "NaN value detected in price observation (unsettled or missing market close)"
 
     # 2. Non-negative prices and volume
     if open_p < 0 or high_p < 0 or low_p < 0 or close_p < 0:
