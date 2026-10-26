@@ -42,13 +42,11 @@ st.markdown("""
 
     /* Streamlit native header padding reset */
     header[data-testid="stHeader"] {
-        background-color: rgba(11, 14, 20, 0.8) !important;
-        backdrop-filter: blur(8px) !important;
-        height: 3rem !important;
+        display: none !important;
     }
 
     .block-container {
-        padding-top: 1rem !important;
+        padding-top: 3.5rem !important;
         padding-bottom: 3.5rem !important;
         max-width: 1320px !important;
         margin: 0 auto !important;
