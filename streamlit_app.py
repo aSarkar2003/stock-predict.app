@@ -40,9 +40,21 @@ st.markdown("""
         line-height: 1.6 !important;
     }
 
-    /* Streamlit native header padding reset */
+    /* Make Streamlit top header translucent without blocking the brand bar */
     header[data-testid="stHeader"] {
-        display: none !important;
+        background: transparent !important;
+        pointer-events: none !important;
+    }
+    header[data-testid="stHeader"] button[data-testid="stSidebarCollapseButton"],
+    header[data-testid="stHeader"] button[data-testid="baseButton-headerNoPadding"],
+    header[data-testid="stHeader"] button {
+        pointer-events: auto !important;
+        background: #141B26 !important;
+        color: #F59E0B !important;
+        border: 1px solid #222C3D !important;
+        border-radius: 6px !important;
+        margin-left: 12px !important;
+        padding: 4px 8px !important;
     }
 
     .block-container {
@@ -681,6 +693,39 @@ if st.sidebar.button("🚪 Terminate Session (Logout)", use_container_width=True
 # VIEW 1: MARKET OVERVIEW & TELEMETRY
 # -----------------------------------------------------------------------------
 if nav_choice == "📊 Market Overview & Radar":
+    # Quick Service Launcher Bar for Logged-In Admin
+    st.markdown("#### ⚡ **Quick Service Switcher**")
+    qs1, qs2, qs3, qs4 = st.columns(4)
+    with qs1:
+        st.markdown("""
+        <div style="background: #141B26; border: 1px solid #222C3D; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+            <div style="color: #38BDF8; font-weight: 700; margin-bottom: 4px;">🤖 AI Forecasters</div>
+            <div style="font-size: 0.82rem; color: #8B949E; margin-bottom: 10px;">LSTM, ANN & Transformer direction predictions</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with qs2:
+        st.markdown("""
+        <div style="background: #141B26; border: 1px solid #222C3D; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+            <div style="color: #3FB950; font-weight: 700; margin-bottom: 4px;">⚡ Stock Analytics</div>
+            <div style="font-size: 0.82rem; color: #8B949E; margin-bottom: 10px;">Candlestick chart & Level-2 orderbook depth</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with qs3:
+        st.markdown("""
+        <div style="background: #141B26; border: 1px solid #222C3D; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+            <div style="color: #F59E0B; font-weight: 700; margin-bottom: 4px;">📜 Audit Ledger</div>
+            <div style="font-size: 0.82rem; color: #8B949E; margin-bottom: 10px;">Trigger-protected immutable database ledger</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with qs4:
+        st.markdown("""
+        <div style="background: #141B26; border: 1px solid #222C3D; border-radius: 8px; padding: 14px; margin-bottom: 14px;">
+            <div style="color: #A855F7; font-weight: 700; margin-bottom: 4px;">📥 Data Ingestion</div>
+            <div style="font-size: 0.82rem; color: #8B949E; margin-bottom: 10px;">Dispatch bulk Yahoo Finance data sync jobs</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("<hr style='border: none; border-bottom: 1px solid #222C3D; margin: 10px 0 18px 0;'>", unsafe_allow_html=True)
     st.markdown("### 📊 **Market Telemetry & Database Repository**")
     
     with get_ro_connection() as conn:
