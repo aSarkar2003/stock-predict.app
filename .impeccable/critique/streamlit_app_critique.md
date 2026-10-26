@@ -46,3 +46,4 @@ We will overhaul `streamlit_app.py` into a genuine Bloomberg Terminal:
 4. **Market News & Catalyst Feed**: Corporate earnings dates, RBI announcements, and sentiment indicators linked to the active stock.
 5. **Obsidian & Amber/Cyan Terminal Aesthetic**: Monospace typography (`JetBrains Mono`, `Roboto Mono`, `tabular-nums`), 2px border radiuses, dark slate `#080B10` background, and elimination of all side-tab borders and gradient slop.
 6. **Unrestricted Guest Terminal Mode**: Guests immediately see the live terminal in read-only observation mode with simulated orders and real price feeds; authentication is an unobtrusive top-right terminal operator toggle.
+

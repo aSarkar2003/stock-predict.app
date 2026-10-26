@@ -18,224 +18,222 @@ from ml.models.ensemble_model import EnsembleModel
 ph = PasswordHasher()
 
 st.set_page_config(
-    page_title="STOCK&PREDICT // TERMINAL v4.2",
-    page_icon="⚡",
+    page_title="StockPredict — Institutional Market Intelligence",
+    page_icon="📈",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 # -----------------------------------------------------------------------------
-# HIGH-DENSITY BLOOMBERG TERMINAL STYLESHEET
+# MODERN FINANCIAL DESIGN SYSTEM (DESIGN.md TOKENS)
 # -----------------------------------------------------------------------------
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-    /* Global Viewport Reset */
+    /* Global Typography & Palette */
     html, body, [class*="css"], .stApp {
-        background-color: #07090E !important;
-        color: #E2E8F0 !important;
-        font-family: 'IBM Plex Sans', -apple-system, sans-serif !important;
-        font-size: 13px !important;
+        background-color: #0D1117 !important;
+        color: #C9D1D9 !important;
+        font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        font-size: 15px !important;
+        line-height: 1.6 !important;
     }
 
+    /* Container Spacing */
     .block-container {
-        padding: 0.2rem 1.2rem 2rem 1.2rem !important;
-        max-width: 100% !important;
+        padding-top: 1.5rem !important;
+        padding-bottom: 3rem !important;
+        max-width: 1360px !important;
+        margin: 0 auto !important;
     }
 
-    /* Monospace Numeric and Terminal Tags */
-    code, pre, [data-testid="stMetricValue"], [data-testid="stMetricLabel"] {
+    /* Monospace for Numbers, Tables, Badges */
+    code, pre, .mono-num, [data-testid="stMetricValue"] {
         font-family: 'JetBrains Mono', monospace !important;
         font-variant-numeric: tabular-nums !important;
     }
 
-    header[data-testid="stHeader"] {
-        display: none !important;
-    }
-
-    /* 1. TOP COMMAND BAR */
-    .bbg-header {
-        background: #0B0E14;
-        border: 1px solid #1A2333;
-        border-bottom: 2px solid #F59E0B;
-        padding: 8px 16px;
+    /* Primary Navigation Header */
+    .site-nav {
+        background: #161B22;
+        border: 1px solid #30363D;
+        border-radius: 8px;
+        padding: 14px 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 4px;
+        margin-bottom: 16px;
     }
-    .bbg-brand {
-        font-family: 'JetBrains Mono', monospace;
-        font-weight: 800;
-        font-size: 1.15rem;
-        color: #F59E0B;
-        letter-spacing: 0.5px;
+    .brand-title {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #F0F6FC;
         display: flex;
         align-items: center;
         gap: 10px;
+        letter-spacing: -0.3px;
     }
-    .bbg-telemetry {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.78rem;
-        color: #94A3B8;
+    .brand-accent {
+        color: #F59E0B;
     }
 
-    /* 2. CONTINUOUS TICKER TAPE */
-    .ticker-bar-container {
-        background: #090C12;
-        border: 1px solid #1A2333;
-        padding: 5px 12px;
+    /* Real-time Ticker Tape */
+    .ticker-bar {
+        background: #161B22;
+        border: 1px solid #30363D;
+        border-radius: 8px;
+        padding: 10px 16px;
         display: flex;
         overflow-x: auto;
         white-space: nowrap;
-        gap: 20px;
-        margin-bottom: 8px;
-        scrollbar-width: none;
-    }
-    .ticker-bar-container::-webkit-scrollbar {
-        display: none;
+        gap: 22px;
+        margin-bottom: 24px;
     }
     .ticker-item {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
+        gap: 8px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.8rem;
+        font-size: 0.88rem;
     }
-    .ticker-symbol {
-        font-weight: 700;
-        color: #F8FAFC;
+    .ticker-name {
+        font-weight: 600;
+        color: #F0F6FC;
     }
-    .ticker-up {
-        color: #00E676;
+    .ticker-val {
+        color: #C9D1D9;
+    }
+    .delta-up {
+        color: #3FB950;
         font-weight: 600;
     }
-    .ticker-down {
-        color: #FF1744;
+    .delta-down {
+        color: #F85149;
         font-weight: 600;
     }
 
-    /* 3. TERMINAL PANEL HEADERS & CARDS */
-    .terminal-panel-header {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.82rem;
+    /* Hero Section */
+    .hero-box {
+        background: #161B22;
+        border: 1px solid #30363D;
+        border-radius: 12px;
+        padding: 36px 40px;
+        margin-bottom: 28px;
+    }
+    .hero-headline {
+        font-size: 2.3rem;
         font-weight: 700;
-        text-transform: uppercase;
-        color: #94A3B8;
-        border-bottom: 1px solid #1A2333;
-        padding-bottom: 6px;
-        margin-bottom: 10px;
+        color: #F0F6FC;
+        line-height: 1.25;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+    }
+    .hero-subtext {
+        font-size: 1.1rem;
+        color: #8B949E;
+        max-width: 840px;
+        margin-bottom: 0;
+        line-height: 1.55;
+    }
+
+    /* Service Cards Grid */
+    .service-card {
+        background: #161B22;
+        border: 1px solid #30363D;
+        border-radius: 10px;
+        padding: 22px 24px;
+        height: 100%;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
-        align-items: center;
     }
-    .terminal-panel-header .tag {
-        color: #F59E0B;
-        font-size: 0.72rem;
-    }
-
-    /* 4. REAL TERMINAL TABS (Full Width Horizontal Navigation Bar) */
-    div[data-testid="stTabs"] {
-        margin-bottom: 10px;
-    }
-    div[data-testid="stTabs"] button[role="tab"] {
-        background-color: #0B0E14 !important;
-        border: 1px solid #1A2333 !important;
-        border-bottom: none !important;
-        border-radius: 0 !important;
-        color: #94A3B8 !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        font-size: 0.82rem !important;
-        font-weight: 700 !important;
-        padding: 8px 18px !important;
-        margin-right: 4px !important;
-        transition: all 0.15s ease !important;
-    }
-    div[data-testid="stTabs"] button[role="tab"]:hover {
-        color: #F8FAFC !important;
-        background-color: #151D2C !important;
-    }
-    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
-        background-color: #151D2C !important;
-        color: #F59E0B !important;
-        border-top: 2px solid #F59E0B !important;
-    }
-
-    /* 5. ORDERBOOK TABLE STYLES */
-    .depth-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.78rem;
-    }
-    .depth-table th {
-        text-align: right;
-        color: #64748B;
+    .service-title {
+        font-size: 1.15rem;
         font-weight: 600;
-        padding: 4px 6px;
-        border-bottom: 1px solid #1A2333;
+        color: #F0F6FC;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-    .depth-table td {
-        text-align: right;
-        padding: 3px 6px;
+    .service-desc {
+        font-size: 0.92rem;
+        color: #8B949E;
+        line-height: 1.5;
+        margin-bottom: 16px;
     }
-    .depth-bid { color: #00E676; }
-    .depth-ask { color: #FF1744; }
 
-    /* Button and Input Styling */
+    /* Buttons: Tactile, Recognizable, Distinct */
     div.stButton > button {
-        background-color: #121824 !important;
-        color: #F8FAFC !important;
-        border: 1px solid #1A2333 !important;
-        border-radius: 0 !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        font-size: 0.8rem !important;
+        background-color: #21262D !important;
+        color: #F0F6FC !important;
+        border: 1px solid #30363D !important;
+        border-radius: 6px !important;
+        font-size: 0.92rem !important;
         font-weight: 600 !important;
-        padding: 6px 14px !important;
+        padding: 8px 18px !important;
+        cursor: pointer !important;
+        transition: background 0.15s ease, border-color 0.15s ease !important;
     }
     div.stButton > button:hover {
-        background-color: #F59E0B !important;
-        color: #07090E !important;
-        border-color: #F59E0B !important;
+        background-color: #30363D !important;
+        border-color: #8B949E !important;
+        color: #FFFFFF !important;
     }
     div.stButton > button[kind="primary"] {
         background-color: #F59E0B !important;
-        color: #07090E !important;
-        border-color: #D97706 !important;
-        font-weight: 800 !important;
+        color: #0D1117 !important;
+        border: 1px solid #D97706 !important;
+        font-weight: 700 !important;
     }
     div.stButton > button[kind="primary"]:hover {
         background-color: #D97706 !important;
         color: #FFFFFF !important;
     }
 
-    div[data-baseweb="select"] > div, div[data-baseweb="input"] > div {
-        background-color: #090C12 !important;
-        border: 1px solid #1A2333 !important;
-        border-radius: 0 !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        font-size: 0.82rem !important;
-        color: #F8FAFC !important;
+    /* Metric Display */
+    div[data-testid="stMetricValue"] {
+        font-size: 1.85rem !important;
+        font-weight: 700 !important;
+        color: #F0F6FC !important;
     }
+    div[data-testid="stMetricLabel"] {
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        color: #8B949E !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.4px !important;
+    }
+
+    /* Inputs */
+    div[data-baseweb="select"] > div, div[data-baseweb="input"] > div {
+        background-color: #0D1117 !important;
+        border: 1px solid #30363D !important;
+        border-radius: 6px !important;
+        font-size: 0.95rem !important;
+        color: #F0F6FC !important;
+    }
+
+    /* Clean Tables */
     div[data-testid="stDataFrame"] {
-        border: 1px solid #1A2333 !important;
+        border: 1px solid #30363D !important;
+        border-radius: 8px !important;
     }
 </style>
 """, unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------
-# AUTHENTICATION STATE & DB USER VERIFICATION
+# AUTHENTICATION STATE & DB VERIFICATION
 # -----------------------------------------------------------------------------
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "user_name" not in st.session_state:
-    st.session_state.user_name = "TERMINAL_GUEST"
+    st.session_state.user_name = None
 if "user_role" not in st.session_state:
-    st.session_state.user_role = "GUEST_OBSERVER"
+    st.session_state.user_role = "guest"
+if "view_mode" not in st.session_state:
+    st.session_state.view_mode = "HOME"
 
 def verify_login(username: str, password: str) -> tuple[bool, str | None]:
     username = username.strip()
@@ -249,22 +247,43 @@ def verify_login(username: str, password: str) -> tuple[bool, str | None]:
                 """, (username,))
                 row = cur.fetchone()
                 if not row:
-                    return False, "User identifier not recognized."
+                    return False, "Username not found in system."
                 pw_hash, role, is_active = row
                 if not is_active:
-                    return False, "Operator account revoked."
+                    return False, "User account is disabled."
                 try:
                     ph.verify(pw_hash, password)
                     return True, role
                 except VerifyMismatchError:
-                    return False, "Cryptographic password verify mismatch."
+                    return False, "Incorrect password."
     except Exception as e:
         if username.lower() == "admin" and password == "admin":
             return True, "admin"
         return False, str(e)
 
 
-# Helper function: Ensure stock history
+def register_user(username: str, email: str, password: str) -> tuple[bool, str]:
+    username = username.strip()
+    email = email.strip()
+    if not username or not password or not email:
+        return False, "All fields are required."
+    try:
+        pw_hash = ph.hash(password)
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO app_user (username, email, password_hash, role)
+                    VALUES (%s, %s, %s, 'analyst'::app_role);
+                """, (username, email, pw_hash))
+        return True, "Account created successfully! You may now sign in."
+    except Exception as e:
+        err_msg = str(e)
+        if "unique" in err_msg.lower():
+            return False, "Username or email already exists."
+        return False, err_msg
+
+
+# Ensure data is present
 def ensure_ticker_data_available(symbol: str, exchange: str = "NSE", years: int = 4) -> bool:
     with get_ro_connection() as conn:
         with conn.cursor() as cur:
@@ -278,7 +297,7 @@ def ensure_ticker_data_available(symbol: str, exchange: str = "NSE", years: int 
     if cnt >= 30:
         return True
 
-    with st.spinner(f"Ingesting live feed for {symbol} ({exchange}) into PostgreSQL..."):
+    with st.spinner(f"Fetching historical data for {symbol} ({exchange})..."):
         try:
             pipeline = IngestionPipeline()
             end_date = datetime.date.today()
@@ -286,41 +305,44 @@ def ensure_ticker_data_available(symbol: str, exchange: str = "NSE", years: int 
             res = pipeline.run_for_ticker(symbol, start_date, end_date, exchange)
             return res["ingested"] > 0
         except Exception as e:
-            st.error(f"Feed ingestion error: {e}")
+            st.error(f"Data ingestion failed: {e}")
             return False
 
 
 # -----------------------------------------------------------------------------
-# 1. TOP COMMAND BAR & SYSTEM TELEMETRY
+# 1. TOP NAVIGATION HEADER
 # -----------------------------------------------------------------------------
-db_healthy = check_db_health()
-current_time = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=5, minutes=30)))
-formatted_time = current_time.strftime("%H:%M:%S IST")
+col_brand, col_auth_action = st.columns([3.5, 1.5])
 
-auth_status = (
-    f'<span style="color: #00E676; font-weight:700;">OPERATOR: {st.session_state.user_name} ({st.session_state.user_role.upper()})</span>'
-    if st.session_state.authenticated
-    else '<span style="color: #F59E0B; font-weight:700;">STATUS: GUEST (UNAUTHENTICATED)</span>'
-)
+with col_brand:
+    st.markdown("""
+    <div class="brand-title">
+        <span>📈 STOCK<span class="brand-accent">&</span>PREDICT</span>
+        <span style="font-size: 0.85rem; color: #8B949E; font-weight: 500;">| Institutional Equity Intelligence</span>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.markdown(f"""
-<div class="bbg-header">
-    <div class="bbg-brand">
-        <span>⚡ STOCK&PREDICT</span>
-        <span style="color: #64748B; font-size: 0.8rem; font-weight: 500;">// INSTITUTIONAL TERMINAL v4.2</span>
-    </div>
-    <div class="bbg-telemetry">
-        <div>FEED: <span style="color: #38BDF8; font-weight: 600;">NSE/BSE (REALTIME)</span></div>
-        <div>POSTGRESQL: <span style="color: {'#00E676' if db_healthy else '#FF1744'}; font-weight:600;">{'ONLINE (POOL 10/10)' if db_healthy else 'OFFLINE'}</span></div>
-        <div>CLOCK: <span style="color: #F8FAFC; font-weight: 600;">{formatted_time}</span></div>
-        <div>{auth_status}</div>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+with col_auth_action:
+    if st.session_state.authenticated:
+        st.write("")
+        c_name, c_btn = st.columns([2, 1])
+        c_name.markdown(f"<div style='text-align: right; padding-top: 6px; font-weight: 600; color: #F0F6FC;'>👤 {st.session_state.user_name}</div>", unsafe_allow_html=True)
+        if c_btn.button("Sign Out", use_container_width=True):
+            st.session_state.authenticated = False
+            st.session_state.user_name = None
+            st.session_state.user_role = "guest"
+            st.session_state.view_mode = "HOME"
+            st.rerun()
+    else:
+        st.write("")
+        col_g1, col_g2 = st.columns([1, 1.2])
+        if col_g2.button("🔑 Login Portal", type="primary", use_container_width=True):
+            st.session_state.view_mode = "LOGIN"
+            st.rerun()
 
 
 # -----------------------------------------------------------------------------
-# 2. CONTINUOUS MARKET TICKER TAPE
+# 2. CONTINUOUS MARKET TICKER TAPE (INDICES & TOP EQUITIES)
 # -----------------------------------------------------------------------------
 with get_ro_connection() as conn:
     df_ticker_tape = pd.read_sql_query("""
@@ -336,89 +358,193 @@ with get_ro_connection() as conn:
         LIMIT 10;
     """, conn)
 
-tape_html = ['<div class="ticker-bar-container">']
-tape_html.append('<div class="ticker-item"><span class="ticker-symbol" style="color:#F59E0B;">INDEX:NIFTY50</span><span style="color:#CBD5E1;">24,380.25</span><span class="ticker-up">▲ +0.62%</span></div>')
-tape_html.append('<div class="ticker-item"><span class="ticker-symbol" style="color:#F59E0B;">INDEX:SENSEX</span><span style="color:#CBD5E1;">80,120.40</span><span class="ticker-up">▲ +0.55%</span></div>')
-tape_html.append('<div class="ticker-item"><span class="ticker-symbol" style="color:#94A3B8;">FX:USDINR</span><span style="color:#CBD5E1;">84.08</span><span class="ticker-down">▼ -0.04%</span></div>')
+tape_html = ['<div class="ticker-bar">']
+tape_html.append('<div class="ticker-item"><span class="ticker-name" style="color: #F59E0B;">NIFTY 50</span><span class="ticker-val">24,380.25</span><span class="delta-up">+0.62%</span></div>')
+tape_html.append('<div class="ticker-item"><span class="ticker-name" style="color: #F59E0B;">SENSEX</span><span class="ticker-val">80,120.40</span><span class="delta-up">+0.55%</span></div>')
+tape_html.append('<div class="ticker-item"><span class="ticker-name" style="color: #58A6FF;">USD/INR</span><span class="ticker-val">84.08</span><span class="delta-down">-0.04%</span></div>')
 
 for _, row in df_ticker_tape.iterrows():
     sym = row["symbol"]
     close = float(row["close_price"]) if pd.notnull(row["close_price"]) else 0.0
     open_p = float(row["open_price"]) if pd.notnull(row["open_price"]) else close
     delta = ((close - open_p) / open_p * 100) if open_p > 0 else 0.0
-    d_class = "ticker-up" if delta >= 0 else "ticker-down"
-    d_sym = "▲ +" if delta >= 0 else "▼ "
-    tape_html.append(f'<div class="ticker-item"><span class="ticker-symbol">{sym}</span><span style="color:#CBD5E1;">₹{close:,.2f}</span><span class="{d_class}">{d_sym}{delta:.2f}%</span></div>')
+    d_class = "delta-up" if delta >= 0 else "delta-down"
+    d_sym = "+" if delta >= 0 else ""
+    tape_html.append(f'<div class="ticker-item"><span class="ticker-name">{sym}</span><span class="ticker-val">₹{close:,.2f}</span><span class="{d_class}">{d_sym}{delta:.2f}%</span></div>')
 
 tape_html.append('</div>')
 st.markdown("".join(tape_html), unsafe_allow_html=True)
 
 
 # -----------------------------------------------------------------------------
-# 3. AUTHENTICATION CONTROLS (HOLISTIC SCREEN IF GUEST)
+# 3. PUBLIC LANDING PAGE & SERVICE DIRECTORY (UNAUTHENTICATED)
 # -----------------------------------------------------------------------------
 if not st.session_state.authenticated:
-    # Dedicated Holistic Terminal Login Screen
+    
+    # Check if Login Portal is clicked
+    if st.session_state.view_mode == "LOGIN":
+        st.markdown("### 🔑 **Operator Authentication Portal**")
+        st.caption("Sign in to access your quantitative models, predictive forecasting, and database audit tools.")
+
+        tab_log, tab_reg = st.tabs(["Sign In to Existing Account", "Create New Analyst Account"])
+
+        with tab_log:
+            col_l1, col_l2 = st.columns([1.5, 2.5])
+            with col_l1:
+                st.markdown("""
+                <div style="background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 20px;">
+                    <h5 style="margin-top:0; color: #F0F6FC;">Evaluation Demo Keys</h5>
+                    <p style="color: #8B949E; font-size: 0.9rem;">Pre-configured administrative access:</p>
+                    <div style="margin-bottom: 8px;">
+                        <span style="color: #8B949E; font-size: 0.85rem;">Username:</span> 
+                        <code style="color: #58A6FF;">Admin</code>
+                    </div>
+                    <div>
+                        <span style="color: #8B949E; font-size: 0.85rem;">Password:</span> 
+                        <code style="color: #3FB950;">admin</code>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+            with col_l2:
+                u_input = st.text_input("Username", value="Admin", key="lp_u")
+                p_input = st.text_input("Password", type="password", value="admin", key="lp_p")
+                
+                col_btn_sub, col_btn_back = st.columns([1.5, 1])
+                with col_btn_sub:
+                    if st.button("Authenticate & Open Terminal", type="primary", use_container_width=True):
+                        ok, role_or_err = verify_login(u_input, p_input)
+                        if ok:
+                            st.session_state.authenticated = True
+                            st.session_state.user_name = u_input
+                            st.session_state.user_role = role_or_err
+                            st.session_state.view_mode = "APP"
+                            st.rerun()
+                        else:
+                            st.error(f"Sign in failed: {role_or_err}")
+                with col_btn_back:
+                    if st.button("Cancel & Return", use_container_width=True):
+                        st.session_state.view_mode = "HOME"
+                        st.rerun()
+
+        with tab_reg:
+            col_r1, col_r2, col_r3 = st.columns(3)
+            reg_u = col_r1.text_input("Username", key="reg_u")
+            reg_e = col_r2.text_input("Email", key="reg_e")
+            reg_p = col_r3.text_input("Password", type="password", key="reg_p")
+
+            if st.button("Create Analyst Account", type="primary", use_container_width=True):
+                ok, msg = register_user(reg_u, reg_e, reg_p)
+                if ok:
+                    st.success(msg)
+                else:
+                    st.error(msg)
+
+        st.stop()
+
+    # Default Public Landing Page
     st.markdown("""
-    <div style="background: #0B0E14; border: 1px solid #1A2333; padding: 24px 28px; margin-bottom: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+    <div class="hero-box">
+        <h1 class="hero-headline">Institutional Indian Equity Forecasting & Verifiable Prediction Ledger</h1>
+        <p class="hero-subtext">
+            A high-performance quantitative platform for NSE and BSE equities. Evaluates machine learning models 
+            under zero look-ahead bias, seals predictions in an immutable PostgreSQL ledger, and benchmarks 
+            statistical scorecards as real market closing prices arrive.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # 4 Service Cards Grid with Direct Login Prompts
+    st.markdown("### 🛠️ **Platform Capabilities & Quantitative Services**")
+    st.caption("All institutional services operate under strict reproducibility and database-level immutability.")
+
+    col_s1, col_s2 = st.columns(2)
+    with col_s1:
+        st.markdown("""
+        <div class="service-card">
             <div>
-                <h3 style="margin: 0; font-family: 'JetBrains Mono', monospace; color: #F59E0B; letter-spacing: 0.5px;">🔒 OPERATOR AUTHENTICATION REQUIRED</h3>
-                <p style="margin: 5px 0 0 0; color: #94A3B8; font-size: 0.88rem;">
-                    Institutional forecasting models, Level-2 depth analytics, and prediction commit services are locked. 
-                    Authenticate with terminal credentials to initialize your active analyst session.
-                </p>
-            </div>
-            <div style="background: #121824; border: 1px solid #1A2333; padding: 8px 14px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;">
-                <span style="color: #64748B;">DEMO OPERATOR:</span> <code style="color: #38BDF8;">Admin</code> &nbsp;|&nbsp;
-                <span style="color: #64748B;">PASSCODE:</span> <code style="color: #00E676;">admin</code>
+                <div class="service-title">🤖 Predictive AI Forecasters (LSTM, ANN, Transformer)</div>
+                <div class="service-desc">
+                    Generates directional classifications and forward price projections across 6 distinct model architectures 
+                    with rolling technical features, self-attention mechanisms, and 80%/95% confidence intervals.
+                </div>
             </div>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    auth_c1, auth_c2, auth_c3 = st.columns([2, 2, 1])
-    in_user = auth_c1.text_input("OPERATOR ID", value="Admin", key="gate_u")
-    in_pass = auth_c2.text_input("PASSCODE", type="password", value="admin", key="gate_p")
-    
-    with auth_c3:
-        st.write("")
-        st.write("")
-        auth_btn = st.button("AUTHENTICATE SESSION", type="primary", use_container_width=True)
-
-    if auth_btn:
-        ok, role_or_err = verify_login(in_user, in_pass)
-        if ok:
-            st.session_state.authenticated = True
-            st.session_state.user_name = in_user
-            st.session_state.user_role = role_or_err
+        """, unsafe_allow_html=True)
+        if st.button("Sign In to Run Predictive Models", key="btn_s1", use_container_width=True):
+            st.session_state.view_mode = "LOGIN"
             st.rerun()
-        else:
-            st.error(f"AUTHENTICATION REJECTED: {role_or_err}")
 
-    st.markdown("<hr style='margin: 16px 0; border: none; border-bottom: 1px solid #1A2333;'>", unsafe_allow_html=True)
+    with col_s2:
+        st.markdown("""
+        <div class="service-card">
+            <div>
+                <div class="service-title">📜 Immutable Database Prediction Ledger</div>
+                <div class="service-desc">
+                    Every quantitative bet is permanently sealed into PostgreSQL before market cutoff. Database triggers 
+                    strictly prohibit UPDATE and DELETE statements, guaranteeing tamper-proof evaluation integrity.
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Sign In to Inspect Audit Ledger", key="btn_s2", use_container_width=True):
+            st.session_state.view_mode = "LOGIN"
+            st.rerun()
 
-    # In Guest Mode: Only 10 market stocks overview is accessible
-    st.markdown("""
-    <div class="terminal-panel-header">
-        <span>CURRENT MARKET OBSERVATIONS // 10 REPRESENTATIVE EQUITIES (GUEST PREVIEW)</span>
-        <span class="tag">READ-ONLY STREAM</span>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+
+    col_s3, col_s4 = st.columns(2)
+    with col_s3:
+        st.markdown("""
+        <div class="service-card">
+            <div>
+                <div class="service-title">⚡ Interactive Candlestick & Level-2 Depth Analytics</div>
+                <div class="service-desc">
+                    Deep financial exploration featuring daily OHLC candlestick charts, volume profiles, EMA-20/SMA-50 overlays, 
+                    and simulated Level-2 Bid/Ask orderbook ladders with basis-point spread telemetry.
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Sign In to Open Analytics Workspace", key="btn_s3", use_container_width=True):
+            st.session_state.view_mode = "LOGIN"
+            st.rerun()
+
+    with col_s4:
+        st.markdown("""
+        <div class="service-card">
+            <div>
+                <div class="service-title">📥 Automated & Manual Market Data Ingestion</div>
+                <div class="service-desc">
+                    Continuous pipeline retrieving daily Indian equity ticks from Yahoo Finance with automated validation guardrails, 
+                    reject logging, and range-partitioned database storage across years 2015 to 2028.
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Sign In to Manage Ingestion Hub", key="btn_s4", use_container_width=True):
+            st.session_state.view_mode = "LOGIN"
+            st.rerun()
+
+    st.markdown("---")
+
+    # Live Stored Market Equities Table
+    st.markdown("### 📊 **Live Market Overview // 10 Representative Indian Equities**")
+    st.caption("Active stocks currently indexed and stored within the PostgreSQL range-partitioned repository.")
 
     with get_ro_connection() as conn:
-        df_guest_view = pd.read_sql_query("""
+        df_public_market = pd.read_sql_query("""
             SELECT DISTINCT ON (st.symbol)
-                st.symbol AS "TICKER",
-                st.name AS "COMPANY NAME",
-                st.exchange AS "EXCH",
-                ind.name AS "SECTOR",
-                sp.price_date AS "LAST DATE",
-                sp.open_price AS "OPEN",
-                sp.high_price AS "HIGH",
-                sp.low_price AS "LOW",
-                sp.close_price AS "CLOSE",
-                sp.volume AS "VOLUME"
+                st.symbol AS "Ticker",
+                st.name AS "Company Name",
+                st.exchange AS "Exchange",
+                ind.name AS "Sector",
+                sp.price_date AS "Latest Date",
+                sp.open_price AS "Open (₹)",
+                sp.high_price AS "High (₹)",
+                sp.low_price AS "Low (₹)",
+                sp.close_price AS "Close (₹)",
+                sp.volume AS "Volume"
             FROM stock_ticker st
             LEFT JOIN industry ind ON st.industry_id = ind.industry_id
             LEFT JOIN stock_price sp ON st.ticker_id = sp.ticker_id
@@ -427,49 +553,62 @@ if not st.session_state.authenticated:
             LIMIT 10;
         """, conn)
 
-    if not df_guest_view.empty:
+    if not df_public_market.empty:
         st.dataframe(
-            df_guest_view.style.format({
-                "OPEN": "₹{:,.2f}",
-                "HIGH": "₹{:,.2f}",
-                "LOW": "₹{:,.2f}",
-                "CLOSE": "₹{:,.2f}",
-                "VOLUME": "{:,.0f}"
+            df_public_market.style.format({
+                "Open (₹)": "₹{:,.2f}",
+                "High (₹)": "₹{:,.2f}",
+                "Low (₹)": "₹{:,.2f}",
+                "Close (₹)": "₹{:,.2f}",
+                "Volume": "{:,.0f}"
             }),
             use_container_width=True,
             hide_index=True
         )
+
     st.stop()
 
 
 # -----------------------------------------------------------------------------
-# 4. AUTHENTICATED REAL NAVBAR TABS (FULL ACCESS TO ALL 5 WORKSPACES)
+# 4. AUTHENTICATED WORKSTATION (HAMBURGER / DRAWER NAVIGATION)
 # -----------------------------------------------------------------------------
-# Top Logout Utility
-col_status_msg, col_logout_btn = st.columns([5, 1])
-with col_status_msg:
-    st.caption(f"Authenticated as **{st.session_state.user_name}** ({st.session_state.user_role.upper()}). All terminal services unlocked.")
-with col_logout_btn:
-    if st.button("TERMINATE SESSION", use_container_width=True):
-        st.session_state.authenticated = False
-        st.session_state.user_name = "TERMINAL_GUEST"
-        st.session_state.user_role = "GUEST_OBSERVER"
-        st.rerun()
+# Clean, intuitive navigation via Sidebar Hamburger Menu
+st.sidebar.markdown(f"""
+<div style="background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 14px; margin-bottom: 20px;">
+    <div style="font-size: 0.8rem; color: #8B949E; text-transform: uppercase; font-weight: 600;">Active Operator</div>
+    <div style="font-size: 1.1rem; font-weight: 700; color: #F0F6FC;">👤 {st.session_state.user_name}</div>
+    <div style="font-size: 0.78rem; color: #F59E0B; font-weight: 600;">ROLE: {st.session_state.user_role.upper()}</div>
+</div>
+""", unsafe_allow_html=True)
 
-# REAL TAB NAVBAR (NO RADIO BUTTONS)
-tab_monitor, tab_analytics, tab_models, tab_ledger, tab_ingest = st.tabs([
-    "📊 [1: MONITOR & DEPTH]",
-    "⚡ [2: ANALYTICS & ORDERBOOK]",
-    "🤖 [3: AI FORECAST MATRIX]",
-    "📜 [4: IMMUTABLE AUDIT LEDGER]",
-    "📥 [5: INGESTION PIPELINE]"
-])
+nav_choice = st.sidebar.radio(
+    "NAVIGATION MENU",
+    [
+        "📊 Market Overview & Radar",
+        "⚡ Stock Analytics & Orderbook",
+        "🤖 Predictive AI Forecasting",
+        "🏆 Model Performance Scorecards",
+        "📜 Immutable Prediction Ledger",
+        "📥 Data Ingestion Hub",
+    ],
+    index=0
+)
+
+st.sidebar.markdown("---")
+if st.sidebar.button("🚪 Terminate Session (Logout)", use_container_width=True):
+    st.session_state.authenticated = False
+    st.session_state.user_name = None
+    st.session_state.user_role = "guest"
+    st.session_state.view_mode = "HOME"
+    st.rerun()
 
 
 # -----------------------------------------------------------------------------
-# WORKSPACE 1: HIGH-DENSITY MARKET MONITOR & DEPTH SUMMARY
+# VIEW 1: MARKET OVERVIEW & TELEMETRY
 # -----------------------------------------------------------------------------
-with tab_monitor:
+if nav_choice == "📊 Market Overview & Radar":
+    st.markdown("### 📊 **Market Telemetry & Database Repository**")
+    
     with get_ro_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT COUNT(*) FROM stock_ticker WHERE is_active = TRUE;")
@@ -481,38 +620,31 @@ with tab_monitor:
             cur.execute("SELECT COUNT(*) FROM prediction_outcome;")
             resolved_preds = cur.fetchone()[0]
 
-    m_col1, m_col2, m_col3, m_col4, m_col5 = st.columns(5)
-    m_col1.metric("TRACKED EQUITIES", f"{active_tickers} STOCKS", "NSE/BSE INDEXED")
-    m_col2.metric("STORED TICKS", f"{total_prices:,} OHLCV", "RANGE PARTITIONED")
-    m_col3.metric("SEALED PREDICTIONS", f"{total_preds} COMMITS", "IMMUTABLE LEDGER")
-    m_col4.metric("RESOLVED OUTCOMES", f"{resolved_preds} GRADED", "AUTOMATED TRIGGER")
-    m_col5.metric("ORDERBOOK SPREAD", "1.25 BPS", "AVG LIQUIDITY")
+    c_m1, c_m2, c_m3, c_m4 = st.columns(4)
+    c_m1.metric("Indexed Equities", f"{active_tickers} Stocks", "NSE / BSE")
+    c_m2.metric("Partitioned Observations", f"{total_prices:,} Days", "2015–2028 Store")
+    c_m3.metric("Sealed Predictions", f"{total_preds} Forecasts", "Tamper-Proof")
+    c_m4.metric("Resolved Outcomes", f"{resolved_preds} Graded", "Automated Trigger")
 
-    st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
+    st.markdown("---")
 
-    col_left, col_right = st.columns([3.5, 1.5])
+    col_grid, col_macro = st.columns([3.2, 1.8])
 
-    with col_left:
-        st.markdown("""
-        <div class="terminal-panel-header">
-            <span>EQUITY TICKER MONITOR // PARTITIONED DATA STORE</span>
-            <span class="tag">REAL-TIME QUOTE GRID</span>
-        </div>
-        """, unsafe_allow_html=True)
-
+    with col_grid:
+        st.markdown("#### **Active Equity Prices**")
         with get_ro_connection() as conn:
             df_full_market = pd.read_sql_query("""
                 SELECT DISTINCT ON (st.symbol)
-                    st.symbol AS "TICKER",
-                    st.name AS "NAME",
-                    st.exchange AS "EXCH",
-                    ind.name AS "SECTOR",
-                    sp.price_date AS "LAST DATE",
-                    sp.open_price AS "OPEN",
-                    sp.high_price AS "HIGH",
-                    sp.low_price AS "LOW",
-                    sp.close_price AS "LAST",
-                    sp.volume AS "VOLUME"
+                    st.symbol AS "Ticker",
+                    st.name AS "Company Name",
+                    st.exchange AS "Exchange",
+                    ind.name AS "Sector",
+                    sp.price_date AS "Latest Date",
+                    sp.open_price AS "Open (₹)",
+                    sp.high_price AS "High (₹)",
+                    sp.low_price AS "Low (₹)",
+                    sp.close_price AS "Close (₹)",
+                    sp.volume AS "Volume"
                 FROM stock_ticker st
                 LEFT JOIN industry ind ON st.industry_id = ind.industry_id
                 LEFT JOIN stock_price sp ON st.ticker_id = sp.ticker_id
@@ -523,63 +655,53 @@ with tab_monitor:
         if not df_full_market.empty:
             st.dataframe(
                 df_full_market.style.format({
-                    "OPEN": "₹{:,.2f}",
-                    "HIGH": "₹{:,.2f}",
-                    "LOW": "₹{:,.2f}",
-                    "LAST": "₹{:,.2f}",
-                    "VOLUME": "{:,.0f}"
+                    "Open (₹)": "₹{:,.2f}",
+                    "High (₹)": "₹{:,.2f}",
+                    "Low (₹)": "₹{:,.2f}",
+                    "Close (₹)": "₹{:,.2f}",
+                    "Volume": "{:,.0f}"
                 }),
                 use_container_width=True,
-                height=400,
                 hide_index=True
             )
 
-    with col_right:
+    with col_macro:
+        st.markdown("#### **Macro Indicators & Catalysts**")
         st.markdown("""
-        <div class="terminal-panel-header">
-            <span>MACRO & CATALYST RADAR</span>
-            <span class="tag">INDIAN MARKETS</span>
-        </div>
-        """, unsafe_allow_html=True)
-
-        st.markdown("""
-        <div style="background: #090C12; border: 1px solid #1A2333; padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">
-            <div style="color: #F59E0B; font-weight:700; margin-bottom: 6px;">[MACRO INDICATORS]</div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>RBI REPO RATE:</span><span style="color:#38BDF8;">6.50% (STABLE)</span></div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>INDIA 10Y BOND:</span><span style="color:#38BDF8;">6.84% (-2 bps)</span></div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>CPI INFLATION:</span><span style="color:#00E676;">5.10% (IN TARGET)</span></div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>CRUDE BRENT:</span><span style="color:#FF1744;">$74.20/bbl</span></div>
-            
-            <div style="color: #F59E0B; font-weight:700; margin-top: 10px; margin-bottom: 6px;">[MARKET CATALYSTS]</div>
-            <div style="border-left: 2px solid #38BDF8; padding-left: 8px; margin-bottom: 8px;">
-                <span style="color: #94A3B8;">RELIANCE:</span> Q3 Petrochem refining margins expand; green hydrogen Capex updates scheduled.
-            </div>
-            <div style="border-left: 2px solid #00E676; padding-left: 8px; margin-bottom: 8px;">
-                <span style="color: #94A3B8;">TCS / INFY:</span> Banking tech cloud renewals surge; margin guidance upgraded by +50 bps.
-            </div>
-            <div style="border-left: 2px solid #F59E0B; padding-left: 8px;">
-                <span style="color: #94A3B8;">HDFCBANK:</span> Deposit mobilization beats loan growth; liquidity coverage at 128%.
-            </div>
+        <div style="background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 18px;">
+            <div style="font-weight: 600; color: #F59E0B; margin-bottom: 10px;">Macro Economic Benchmarks</div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>RBI Repo Rate:</span><span style="color:#58A6FF; font-weight:600;">6.50%</span></div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>India 10Y Bond:</span><span style="color:#58A6FF; font-weight:600;">6.84%</span></div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>CPI Inflation:</span><span style="color:#3FB950; font-weight:600;">5.10%</span></div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;"><span>Brent Crude:</span><span style="color:#F85149; font-weight:600;">$74.20/bbl</span></div>
+            <hr style="border: none; border-bottom: 1px solid #30363D; margin: 12px 0;">
+            <div style="font-weight: 600; color: #F59E0B; margin-bottom: 8px;">Corporate Catalyst Feed</div>
+            <p style="font-size: 0.88rem; color: #8B949E; margin-bottom: 8px;">
+                <b style="color: #F0F6FC;">RELIANCE:</b> Q3 refining margin forecasts positive; capex guidance confirmed.
+            </p>
+            <p style="font-size: 0.88rem; color: #8B949E; margin-bottom: 0;">
+                <b style="color: #F0F6FC;">TCS & INFY:</b> US banking deal wins rise +14% YoY; cloud renewal velocity strong.
+            </p>
         </div>
         """, unsafe_allow_html=True)
 
 
 # -----------------------------------------------------------------------------
-# WORKSPACE 2: INTERACTIVE ANALYTICS, CANDLESTICK & LEVEL-2 DEPTH
+# VIEW 2: STOCK ANALYTICS & LEVEL-2 ORDERBOOK
 # -----------------------------------------------------------------------------
-with tab_analytics:
+elif nav_choice == "⚡ Stock Analytics & Orderbook":
+    st.markdown("### ⚡ **Interactive Stock Analytics & Orderbook**")
+
     with get_ro_connection() as conn:
         df_tickers = pd.read_sql_query("SELECT symbol, name, exchange FROM stock_ticker ORDER BY symbol;", conn)
 
-    ctrl_col1, ctrl_col2, ctrl_col3 = st.columns([2, 1, 1])
-    active_sym = ctrl_col1.selectbox("ACTIVE EQUITY", df_tickers["symbol"].tolist(), index=0, key="ana_sym")
+    ctrl_c1, ctrl_c2 = st.columns([3, 1])
+    active_sym = ctrl_c1.selectbox("Select Equity Ticker", df_tickers["symbol"].tolist(), index=0)
     ticker_meta = df_tickers[df_tickers["symbol"] == active_sym].iloc[0]
 
-    with ctrl_col2:
-        period_choice = st.selectbox("TIMEFRAME", ["6 MONTHS", "1 YEAR", "3 YEARS", "ALL HISTORY"], index=1, key="ana_tf")
-    with ctrl_col3:
+    with ctrl_c2:
         st.write("")
-        if st.button("SYNC LIVE FEED", use_container_width=True, key="ana_sync"):
+        if st.button("🔄 Sync Market Data", use_container_width=True):
             ensure_ticker_data_available(active_sym, ticker_meta["exchange"])
 
     with get_ro_connection() as conn:
@@ -600,15 +722,10 @@ with tab_analytics:
         net_chg = last_p - prev_p
         pct_chg = (net_chg / prev_p) * 100
 
-        pane_chart, pane_orderbook = st.columns([3.3, 1.7])
+        col_c_left, col_c_right = st.columns([3.3, 1.7])
 
-        with pane_chart:
-            st.markdown(f"""
-            <div class="terminal-panel-header">
-                <span>{ticker_meta['name']} // {ticker_meta['exchange']}:{active_sym}</span>
-                <span class="tag">LAST: ₹{last_p:,.2f} ({net_chg:+.2f} / {pct_chg:+.2f}%)</span>
-            </div>
-            """, unsafe_allow_html=True)
+        with col_c_left:
+            st.markdown(f"#### **{ticker_meta['name']}** (`{ticker_meta['exchange']}:{active_sym}`) — ₹{last_p:,.2f} ({net_chg:+.2f} / {pct_chg:+.2f}%)")
 
             fig = make_subplots(
                 rows=2, cols=1,
@@ -624,27 +741,25 @@ with tab_analytics:
                 low=df_sym_prices["low_price"],
                 close=df_sym_prices["close_price"],
                 name="OHLC",
-                increasing_line_color="#00E676",
-                decreasing_line_color="#FF1744",
-                increasing_fillcolor="#00E676",
-                decreasing_fillcolor="#FF1744",
+                increasing_line_color="#3FB950",
+                decreasing_line_color="#F85149",
             ), row=1, col=1)
 
             fig.add_trace(go.Scatter(
                 x=df_sym_prices["price_date"],
                 y=df_sym_prices["EMA20"],
                 name="EMA 20",
-                line=dict(color="#38BDF8", width=1.2),
+                line=dict(color="#58A6FF", width=1.4),
             ), row=1, col=1)
 
             fig.add_trace(go.Scatter(
                 x=df_sym_prices["price_date"],
                 y=df_sym_prices["SMA50"],
                 name="SMA 50",
-                line=dict(color="#F59E0B", width=1.2),
+                line=dict(color="#F59E0B", width=1.4),
             ), row=1, col=1)
 
-            vol_colors = ["#00E676" if c >= o else "#FF1744" for c, o in zip(df_sym_prices["close_price"], df_sym_prices["open_price"])]
+            vol_colors = ["#3FB950" if c >= o else "#F85149" for c, o in zip(df_sym_prices["close_price"], df_sym_prices["open_price"])]
             fig.add_trace(go.Bar(
                 x=df_sym_prices["price_date"],
                 y=df_sym_prices["volume"],
@@ -654,30 +769,22 @@ with tab_analytics:
             ), row=2, col=1)
 
             fig.update_layout(
-                height=480,
+                height=500,
                 margin=dict(l=10, r=10, t=10, b=10),
-                paper_bgcolor="#090C12",
-                plot_bgcolor="#07090E",
-                font=dict(family="JetBrains Mono", size=10, color="#94A3B8"),
+                paper_bgcolor="#161B22",
+                plot_bgcolor="#0D1117",
+                font=dict(family="Inter", size=11, color="#8B949E"),
                 xaxis_rangeslider_visible=False,
                 hovermode="x unified",
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
             )
-            fig.update_yaxes(gridcolor="#1A2333", zerolinecolor="#1A2333", row=1, col=1)
-            fig.update_yaxes(gridcolor="#1A2333", zerolinecolor="#1A2333", row=2, col=1)
-            fig.update_xaxes(gridcolor="#1A2333", zerolinecolor="#1A2333")
+            fig.update_yaxes(gridcolor="#30363D", row=1, col=1)
+            fig.update_yaxes(gridcolor="#30363D", row=2, col=1)
+            fig.update_xaxes(gridcolor="#30363D")
 
             st.plotly_chart(fig, use_container_width=True)
 
-        with pane_orderbook:
-            st.markdown(f"""
-            <div class="terminal-panel-header">
-                <span>SIMULATED LEVEL-2 DEPTH LADDER</span>
-                <span class="tag">SPREAD: 0.05 (1.1 BPS)</span>
-            </div>
-            """, unsafe_allow_html=True)
-
-            # High-density clean orderbook (NO RAW HTML TAG LEAKAGE)
+        with col_c_right:
+            st.markdown("#### **Level-2 Depth Ladder**")
             spread = 0.05
             depth_rows = []
             for i in range(1, 6):
@@ -686,79 +793,74 @@ with tab_analytics:
                 b_vol = int(1200 * (6 - i) * 0.9)
                 a_vol = int(1150 * (6 - i) * 0.85)
                 depth_rows.append({
-                    "BID VOL": f"{b_vol:,}",
-                    "BID (₹)": f"{b_p:.2f}",
-                    "ASK (₹)": f"{a_p:.2f}",
-                    "ASK VOL": f"{a_vol:,}"
+                    "Bid Vol": f"{b_vol:,}",
+                    "Bid (₹)": f"₹{b_p:.2f}",
+                    "Ask (₹)": f"₹{a_p:.2f}",
+                    "Ask Vol": f"{a_vol:,}"
                 })
             st.dataframe(pd.DataFrame(depth_rows), use_container_width=True, hide_index=True)
 
             st.markdown(f"""
-            <div style="background: #090C12; border: 1px solid #1A2333; padding: 10px; margin-top: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.76rem;">
-                <div style="color: #38BDF8; font-weight:700; margin-bottom: 6px;">[EXECUTION TELEMETRY]</div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span>EST. VWAP SLIPPAGE:</span><span style="color:#00E676;">0.024% (MINIMAL)</span></div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span>AVG DAILY TURNOVER:</span><span style="color:#F8FAFC;">₹1,420.5 Cr</span></div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span>VOLATILITY (ATR-14):</span><span style="color:#F59E0B;">₹{last_p*0.018:.2f} (1.8%)</span></div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 3px;"><span>MARKET RESILIENCE:</span><span style="color:#00E676;">98.4 / 100</span></div>
+            <div style="background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 14px; margin-top: 14px;">
+                <div style="font-weight: 600; color: #58A6FF; margin-bottom: 6px;">Execution Metrics</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>Est. Slippage:</span><span style="color:#3FB950; font-weight:600;">0.024%</span></div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>Volatility (ATR-14):</span><span style="color:#F59E0B; font-weight:600;">₹{last_p*0.018:.2f} (1.8%)</span></div>
+                <div style="display: flex; justify-content: space-between;"><span>Liquidity Quality:</span><span style="color:#3FB950; font-weight:600;">Optimal (98.4/100)</span></div>
             </div>
             """, unsafe_allow_html=True)
     else:
-        st.warning(f"No price history in PostgreSQL for {active_sym}. Click 'SYNC LIVE FEED' to populate.")
+        st.warning(f"No price history available in database for {active_sym}. Click 'Sync Market Data' to fetch it.")
 
 
 # -----------------------------------------------------------------------------
-# WORKSPACE 3: AI FORECAST MATRIX (ANN, LSTM, TRANSFORMER, PROPHET, ENSEMBLE)
+# VIEW 3: PREDICTIVE AI FORECASTING
 # -----------------------------------------------------------------------------
-with tab_models:
+elif nav_choice == "🤖 Predictive AI Forecasting":
+    st.markdown("### 🤖 **Predictive AI Forecasting Engine**")
+
     with get_ro_connection() as conn:
         symbols = pd.read_sql_query("SELECT symbol FROM stock_ticker ORDER BY symbol;", conn)["symbol"].tolist()
         models = pd.read_sql_query("SELECT name FROM model ORDER BY name;", conn)["name"].tolist()
 
-    f_col1, f_col2, f_col3, f_col4 = st.columns([1.5, 1.5, 1.5, 1.5])
-    sel_stock = f_col1.selectbox("EQUITY ASSET", symbols, index=0, key="f_stock")
+    f_col1, f_col2, f_col3, f_col4 = st.columns([2, 2, 1.5, 1.5])
+    sel_stock = f_col1.selectbox("Select Equity Ticker", symbols, index=0)
     sel_model = f_col2.selectbox(
-        "MODEL ARCHITECTURE",
+        "Choose Model Architecture",
         models,
         index=min(len(models)-1, 3),
-        key="f_model",
         format_func=lambda m: {
-            "lstm": "LSTM (RECURRENT RNN)",
-            "ann": "ANN (15-FEATURE MLP)",
-            "transformer": "TRANSFORMER (SELF-ATTENTION)",
-            "ensemble": "CONSENSUS ENSEMBLE (META)",
-            "prophet": "FACEBOOK PROPHET",
-            "naive_last": "NAIVE LAST (BENCHMARK)",
-            "drift": "HISTORICAL DRIFT"
+            "lstm": "LSTM (Recurrent RNN)",
+            "ann": "ANN (15-Feature MLP)",
+            "transformer": "Transformer (Self-Attention)",
+            "ensemble": "Consensus Ensemble (Meta)",
+            "prophet": "Facebook Prophet",
+            "naive_last": "Naive Last (Baseline)",
+            "drift": "Historical Drift"
         }.get(m, m.upper())
     )
-    sel_h = f_col3.selectbox("HORIZON", [1, 5, 21], key="f_h", format_func=lambda d: f"{d} TRADING DAY{'S' if d>1 else ''}")
-    
+    sel_h = f_col3.selectbox("Forecast Horizon", [1, 5, 21], format_func=lambda d: f"{d} Trading Day{'s' if d>1 else ''}")
+
     with f_col4:
         st.write("")
-        exec_pred = st.button("⚡ EXECUTE & SEAL PREDICTION", type="primary", use_container_width=True, key="f_exec")
+        exec_pred = st.button("Generate & Seal Forecast", type="primary", use_container_width=True)
 
     if exec_pred:
         ensure_ticker_data_available(sel_stock)
         try:
             res = generate_and_persist_prediction(sel_stock, sel_model, datetime.date.today(), horizon_days=sel_h)
             st.success(
-                f"IMMUTABLE LEDGER COMMIT SUCCESSFUL: RECORD #{res['prediction_id']} | "
-                f"DIRECTION: {res['predicted_direction']} ({res['probability_up']*100:.1f}%) | "
-                f"TARGET: ₹{res['predicted_close']:.2f} (DATE: {res['target_date']}) | "
-                f"INTERVAL: [₹{res['lower_bound']:.2f} - ₹{res['upper_bound']:.2f}]"
+                f"Prediction Sealed into Ledger! (ID: #{res['prediction_id']})\n\n"
+                f"• Direction: **{res['predicted_direction']}** ({res['probability_up']*100:.1f}% confidence)\n"
+                f"• Target Price: **₹{res['predicted_close']:.2f}** (Target Date: {res['target_date']})\n"
+                f"• Prediction Interval: **[₹{res['lower_bound']:.2f} — ₹{res['upper_bound']:.2f}]**"
             )
         except Exception as e:
-            st.error(f"Commit rejected: {e}")
+            st.error(f"Prediction execution failed: {e}")
 
-    st.markdown("<hr style='margin: 8px 0; border: none; border-bottom: 1px solid #1A2333;'>", unsafe_allow_html=True)
+    st.markdown("---")
 
-    st.markdown("""
-    <div class="terminal-panel-header">
-        <span>MULTI-ARCHITECTURE CONSENSUS PROJECTIONS // SIDE-BY-SIDE TRAJECTORIES</span>
-        <span class="tag">6-MODEL SYNTHESIS</span>
-    </div>
-    """, unsafe_allow_html=True)
-
+    # Multi-Model Side-by-Side Trajectories
+    st.markdown("#### **Multi-Model Consensus Projections**")
     with get_ro_connection() as conn:
         df_hist = pd.read_sql_query("""
             SELECT price_date, close_price FROM stock_price sp
@@ -780,23 +882,23 @@ with tab_models:
             x=df_hist["price_date"].tail(30),
             y=df_hist["close_price"].tail(30),
             mode="lines+markers",
-            name="HISTORICAL CLOSE",
-            line=dict(color="#64748B", width=2),
+            name="Recent Observed Close",
+            line=dict(color="#58A6FF", width=2.5),
         ))
 
         model_palette = {
-            "naive_last": "#94A3B8",
+            "naive_last": "#8B949E",
             "drift": "#F59E0B",
             "ann": "#FB923C",
-            "lstm": "#00E676",
+            "lstm": "#3FB950",
             "transformer": "#A855F7",
-            "ensemble": "#00E5FF",
+            "ensemble": "#38BDF8",
         }
 
         proj_x = [last_date, last_date + datetime.timedelta(days=sel_h * 2)]
         for m_k, p_res in all_preds.items():
-            c = model_palette.get(m_k, "#E2E8F0")
-            w = 3.5 if m_k == "ensemble" else 1.5
+            c = model_palette.get(m_k, "#C9D1D9")
+            w = 3.5 if m_k == "ensemble" else 1.8
             comp_fig.add_trace(go.Scatter(
                 x=proj_x,
                 y=[last_price, p_res["predicted_close"]],
@@ -809,70 +911,87 @@ with tab_models:
             x=[proj_x[1], proj_x[1]],
             y=[ens_pred["lower_bound"], ens_pred["upper_bound"]],
             mode="lines+markers",
-            name="ENSEMBLE BOUNDS [95%]",
-            line=dict(color="rgba(0, 229, 255, 0.7)", width=8),
+            name="Ensemble Uncertainty Band",
+            line=dict(color="rgba(56, 189, 248, 0.6)", width=8),
         ))
 
         comp_fig.update_layout(
-            height=400,
+            height=440,
             margin=dict(l=10, r=10, t=10, b=10),
-            paper_bgcolor="#090C12",
-            plot_bgcolor="#07090E",
-            font=dict(family="JetBrains Mono", size=10, color="#94A3B8"),
+            paper_bgcolor="#161B22",
+            plot_bgcolor="#0D1117",
+            font=dict(family="Inter", size=11, color="#8B949E"),
             hovermode="x unified",
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         )
-        comp_fig.update_yaxes(gridcolor="#1A2333")
-        comp_fig.update_xaxes(gridcolor="#1A2333")
+        comp_fig.update_yaxes(gridcolor="#30363D")
+        comp_fig.update_xaxes(gridcolor="#30363D")
         st.plotly_chart(comp_fig, use_container_width=True)
 
+        # Quantitative Metrics Table
         matrix_data = []
         for m_k, p_res in all_preds.items():
             matrix_data.append({
-                "ARCHITECTURE": m_k.upper(),
-                "TARGET CLOSE": f"₹{p_res['predicted_close']:.2f}",
-                "LOG RETURN": f"{p_res['predicted_log_return'] * 100:+.3f}%",
-                "BIAS": p_res["predicted_direction"],
-                "PROBABILITY (UP)": f"{p_res['probability_up'] * 100:.1f}%",
-                "LOWER BOUND": f"₹{p_res['lower_bound']:.2f}",
-                "UPPER BOUND": f"₹{p_res['upper_bound']:.2f}",
+                "Model Architecture": m_k.upper(),
+                "Target Close": f"₹{p_res['predicted_close']:.2f}",
+                "Expected Return": f"{p_res['predicted_log_return'] * 100:+.2f}%",
+                "Direction Bias": p_res["predicted_direction"],
+                "Confidence (UP)": f"{p_res['probability_up'] * 100:.1f}%",
+                "Lower Bound": f"₹{p_res['lower_bound']:.2f}",
+                "Upper Bound": f"₹{p_res['upper_bound']:.2f}",
             })
         st.dataframe(pd.DataFrame(matrix_data), use_container_width=True, hide_index=True)
 
 
 # -----------------------------------------------------------------------------
-# WORKSPACE 4: IMMUTABLE AUDIT LEDGER & RESOLUTION
+# VIEW 4: MODEL SCORECARDS
 # -----------------------------------------------------------------------------
-with tab_ledger:
-    col_l_header, col_l_act = st.columns([3.5, 1.5])
-    with col_l_header:
-        st.markdown("""
-        <div class="terminal-panel-header">
-            <span>POSTGRESQL IMMUTABLE PREDICTION LEDGER</span>
-            <span class="tag">TAMPER-PROOF AUDIT TRAIL</span>
-        </div>
-        """, unsafe_allow_html=True)
-    with col_l_act:
-        if st.button("⚖️ TRIGGER OUTCOME RESOLUTION", use_container_width=True, key="led_res"):
+elif nav_choice == "🏆 Model Performance Scorecards":
+    st.markdown("### 🏆 **Model Performance Scorecards**")
+    st.caption("Verifiable statistical grading (Directional Accuracy, Brier Score, and MAE) calculated through PostgreSQL Materialized Views.")
+
+    col_btn_sc, _ = st.columns([2, 3])
+    with col_btn_sc:
+        if st.button("🔄 Refresh Scorecard View", use_container_width=True):
+            refresh_scorecard_materialized_view()
+            st.success("Scorecard Materialized View updated successfully!")
+
+    scorecards = get_model_scorecards()
+    if scorecards:
+        df_scorecards = pd.DataFrame(scorecards)
+        st.dataframe(df_scorecards, use_container_width=True, hide_index=True)
+    else:
+        st.info("No resolved predictions available for scorecards yet. Generate predictions and resolve them once market data arrives.")
+
+
+# -----------------------------------------------------------------------------
+# VIEW 5: IMMUTABLE PREDICTION LEDGER
+# -----------------------------------------------------------------------------
+elif nav_choice == "📜 Immutable Prediction Ledger":
+    col_lh, col_la = st.columns([3.5, 1.5])
+    with col_lh:
+        st.markdown("### 📜 **PostgreSQL Immutable Prediction Ledger**")
+        st.caption("Permanent record of all algorithmic forecasts protected by database triggers against modification.")
+    with col_la:
+        if st.button("⚖️ Run Outcome Resolution", use_container_width=True):
             cnt = resolve_predictions_for_ticker()
-            st.info(f"Resolved {cnt} pending prediction ledger records.")
+            st.info(f"Evaluated and resolved {cnt} pending prediction ledger records.")
 
     with get_ro_connection() as conn:
         df_audit = pd.read_sql_query("""
             SELECT 
                 p.prediction_id AS "ID",
-                st.symbol AS "TICKER",
-                m.name AS "MODEL",
-                p.prediction_date AS "PRED DATE",
-                p.target_date AS "TARGET DATE",
-                p.horizon_days AS "HORIZON",
-                p.predicted_direction AS "DIR",
-                p.predicted_close AS "PREDICTED",
-                p.lower_bound AS "LOWER",
-                p.upper_bound AS "UPPER",
-                po.actual_close AS "ACTUAL",
-                po.direction_correct AS "CORRECT",
-                CASE WHEN po.outcome_id IS NOT NULL THEN 'RESOLVED' ELSE 'PENDING' END AS "STATUS"
+                st.symbol AS "Ticker",
+                m.name AS "Model",
+                p.prediction_date AS "Pred Date",
+                p.target_date AS "Target Date",
+                p.horizon_days AS "Horizon",
+                p.predicted_direction AS "Direction",
+                p.predicted_close AS "Predicted (₹)",
+                p.lower_bound AS "Lower (₹)",
+                p.upper_bound AS "Upper (₹)",
+                po.actual_close AS "Actual (₹)",
+                po.direction_correct AS "Correct?",
+                CASE WHEN po.outcome_id IS NOT NULL THEN 'RESOLVED' ELSE 'PENDING' END AS "Status"
             FROM prediction p
             JOIN stock_ticker st ON p.ticker_id = st.ticker_id
             JOIN model m ON p.model_id = m.model_id
@@ -884,70 +1003,58 @@ with tab_ledger:
     if not df_audit.empty:
         st.dataframe(
             df_audit.style.format({
-                "PREDICTED": "₹{:,.2f}",
-                "LOWER": "₹{:,.2f}",
-                "UPPER": "₹{:,.2f}",
-                "ACTUAL": lambda v: f"₹{float(v):,.2f}" if pd.notnull(v) and str(v).strip() != '' else "—"
+                "Predicted (₹)": "₹{:,.2f}",
+                "Lower (₹)": "₹{:,.2f}",
+                "Upper (₹)": "₹{:,.2f}",
+                "Actual (₹)": lambda v: f"₹{float(v):,.2f}" if pd.notnull(v) and str(v).strip() != '' else "—"
             }),
             use_container_width=True,
-            height=480,
             hide_index=True
         )
     else:
-        st.info("Zero ledger records committed yet. Generate a prediction in Workspace 3.")
+        st.info("No prediction records committed to ledger yet.")
 
 
 # -----------------------------------------------------------------------------
-# WORKSPACE 5: INGESTION PIPELINE & AUDIT RUNS
+# VIEW 6: DATA INGESTION HUB
 # -----------------------------------------------------------------------------
-with tab_ingest:
-    st.markdown("""
-    <div class="terminal-panel-header">
-        <span>MARKET DATA INGESTION // PARTITIONED BULK DISPATCH</span>
-        <span class="tag">YAHOO FINANCE GATEWAY</span>
-    </div>
-    """, unsafe_allow_html=True)
+elif nav_choice == "📥 Data Ingestion Hub":
+    st.markdown("### 📥 **Market Data Ingestion Hub**")
+    st.caption("Pulls historical and live OHLCV data from Yahoo Finance into PostgreSQL range-partitioned tables.")
 
     with get_ro_connection() as conn:
         symbols = pd.read_sql_query("SELECT symbol FROM stock_ticker ORDER BY symbol;", conn)["symbol"].tolist()
 
-    i_col1, i_col2, i_col3, i_col4 = st.columns([1.5, 1.5, 1.5, 1.5])
-    t_ingest = i_col1.selectbox("TARGET SYMBOL", symbols, key="ing_sym")
-    s_ingest = i_col2.date_input("START DATE", datetime.date(2020, 1, 1), key="ing_s")
-    e_ingest = i_col3.date_input("END DATE", datetime.date.today(), key="ing_e")
+    i_col1, i_col2, i_col3, i_col4 = st.columns([2, 1.5, 1.5, 1.5])
+    t_ingest = i_col1.selectbox("Equity Ticker", symbols)
+    s_ingest = i_col2.date_input("Start Date", datetime.date(2020, 1, 1))
+    e_ingest = i_col3.date_input("End Date", datetime.date.today())
 
     with i_col4:
         st.write("")
-        trigger_ingest = st.button("RUN INGESTION JOB", type="primary", use_container_width=True, key="ing_btn")
+        trigger_ingest = st.button("Start Ingestion Job", type="primary", use_container_width=True)
 
     if trigger_ingest:
-        with st.spinner(f"Ingesting {t_ingest} from market gateway..."):
+        with st.spinner(f"Ingesting daily observations for {t_ingest}..."):
             pipeline = IngestionPipeline()
             try:
                 res = pipeline.run_for_ticker(t_ingest, s_ingest, e_ingest)
-                st.success(f"INGESTION COMPLETED: {res['ingested']} observations committed (Rejects: {res['rejected']}).")
+                st.success(f"Ingestion {res['status'].upper()}: {res['ingested']} records stored into PostgreSQL (Rejections: {res['rejected']}).")
             except Exception as e:
                 st.error(f"Ingestion failed: {e}")
 
-    st.markdown("<hr style='margin: 8px 0; border: none; border-bottom: 1px solid #1A2333;'>", unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="terminal-panel-header">
-        <span>HISTORICAL INGESTION RUN AUDIT TRAIL</span>
-        <span class="tag">JOB LOGS</span>
-    </div>
-    """, unsafe_allow_html=True)
-
+    st.markdown("---")
+    st.markdown("#### **Recent Ingestion Job Logs**")
     with get_ro_connection() as conn:
         df_runs = pd.read_sql_query("""
             SELECT 
-                ir.run_id AS "RUN ID",
-                st.symbol AS "TICKER",
-                ir.status AS "STATUS",
-                ir.records_ingested AS "INGESTED",
-                ir.records_rejected AS "REJECTED",
-                ir.started_at AS "STARTED AT",
-                ir.completed_at AS "COMPLETED AT"
+                ir.run_id AS "Run ID",
+                st.symbol AS "Ticker",
+                ir.status AS "Status",
+                ir.records_ingested AS "Ingested",
+                ir.records_rejected AS "Rejected",
+                ir.started_at AS "Started At",
+                ir.completed_at AS "Completed At"
             FROM ingestion_run ir
             JOIN stock_ticker st ON ir.ticker_id = st.ticker_id
             ORDER BY ir.run_id DESC LIMIT 25;
@@ -956,4 +1063,4 @@ with tab_ingest:
     if not df_runs.empty:
         st.dataframe(df_runs, use_container_width=True, hide_index=True)
     else:
-        st.info("No ingestion audit logs recorded.")
+        st.info("No ingestion audit runs logged yet.")
