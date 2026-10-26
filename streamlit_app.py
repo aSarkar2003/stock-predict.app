@@ -25,26 +25,32 @@ st.set_page_config(
 )
 
 # -----------------------------------------------------------------------------
-# MODERN FINANCIAL DESIGN SYSTEM (DESIGN.md TOKENS)
+# MODERN HIGH-CRAFT DESIGN SYSTEM (Inspired by AI Engineering from Scratch)
 # -----------------------------------------------------------------------------
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
     /* Global Typography & Palette */
     html, body, [class*="css"], .stApp {
-        background-color: #0D1117 !important;
+        background-color: #0B0E14 !important;
         color: #C9D1D9 !important;
         font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         font-size: 15px !important;
         line-height: 1.6 !important;
     }
 
-    /* Container Spacing */
+    /* Streamlit native header padding reset */
+    header[data-testid="stHeader"] {
+        background-color: rgba(11, 14, 20, 0.8) !important;
+        backdrop-filter: blur(8px) !important;
+        height: 3rem !important;
+    }
+
     .block-container {
-        padding-top: 1.5rem !important;
-        padding-bottom: 3rem !important;
-        max-width: 1360px !important;
+        padding-top: 1rem !important;
+        padding-bottom: 3.5rem !important;
+        max-width: 1320px !important;
         margin: 0 auto !important;
     }
 
@@ -54,48 +60,72 @@ st.markdown("""
         font-variant-numeric: tabular-nums !important;
     }
 
-    /* Primary Navigation Header */
-    .site-nav {
-        background: #161B22;
-        border: 1px solid #30363D;
-        border-radius: 8px;
-        padding: 14px 20px;
+    /* Top Brand Navigation Header Bar */
+    .top-navbar {
+        background: #121722;
+        border: 1px solid #222C3D;
+        border-radius: 10px;
+        padding: 12px 24px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
     }
-    .brand-title {
-        font-size: 1.35rem;
-        font-weight: 700;
-        color: #F0F6FC;
+    .brand-group {
         display: flex;
         align-items: center;
-        gap: 10px;
-        letter-spacing: -0.3px;
+        gap: 12px;
     }
-    .brand-accent {
-        color: #F59E0B;
+    .brand-logo-badge {
+        background: #F59E0B;
+        color: #0B0E14;
+        font-weight: 800;
+        font-size: 1.15rem;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-family: 'JetBrains Mono', monospace;
+    }
+    .brand-name {
+        font-size: 1.35rem;
+        font-weight: 800;
+        color: #F0F6FC;
+        letter-spacing: -0.4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .brand-subtitle {
+        color: #6E7681;
+        font-size: 0.88rem;
+        font-weight: 500;
+        margin-left: 10px;
+        padding-left: 12px;
+        border-left: 1px solid #222C3D;
     }
 
-    /* Real-time Ticker Tape */
+    /* Continuous Ticker Tape */
     .ticker-bar {
-        background: #161B22;
-        border: 1px solid #30363D;
+        background: #121722;
+        border: 1px solid #222C3D;
         border-radius: 8px;
-        padding: 10px 16px;
+        padding: 8px 16px;
         display: flex;
         overflow-x: auto;
         white-space: nowrap;
         gap: 22px;
         margin-bottom: 24px;
+        scrollbar-width: none;
+    }
+    .ticker-bar::-webkit-scrollbar {
+        display: none;
     }
     .ticker-item {
         display: inline-flex;
         align-items: center;
         gap: 8px;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.88rem;
+        font-size: 0.86rem;
     }
     .ticker-name {
         font-weight: 600;
@@ -113,77 +143,112 @@ st.markdown("""
         font-weight: 600;
     }
 
-    /* Hero Section */
-    .hero-box {
-        background: #161B22;
-        border: 1px solid #30363D;
+    /* Hero Banner with Geometric Graphics */
+    .hero-container {
+        background: radial-gradient(circle at 85% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 60%), #121722;
+        border: 1px solid #222C3D;
         border-radius: 12px;
-        padding: 36px 40px;
-        margin-bottom: 28px;
+        padding: 40px 44px;
+        margin-bottom: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(245, 158, 11, 0.12);
+        color: #F59E0B;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 16px;
+        font-family: 'JetBrains Mono', monospace;
     }
     .hero-headline {
-        font-size: 2.3rem;
-        font-weight: 700;
+        font-size: 2.5rem;
+        font-weight: 800;
         color: #F0F6FC;
-        line-height: 1.25;
-        margin-bottom: 12px;
-        letter-spacing: -0.5px;
+        line-height: 1.2;
+        margin-bottom: 14px;
+        letter-spacing: -0.6px;
     }
     .hero-subtext {
-        font-size: 1.1rem;
+        font-size: 1.12rem;
         color: #8B949E;
-        max-width: 840px;
+        max-width: 820px;
+        line-height: 1.6;
         margin-bottom: 0;
-        line-height: 1.55;
     }
 
-    /* Service Cards Grid */
-    .service-card {
-        background: #161B22;
-        border: 1px solid #30363D;
-        border-radius: 10px;
-        padding: 22px 24px;
+    /* Visual Graphic Pill Cards for Services */
+    .service-card-wrapper {
+        background: #121722;
+        border: 1px solid #222C3D;
+        border-radius: 12px;
+        padding: 24px 26px;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        transition: transform 0.2s ease, border-color 0.2s ease;
     }
-    .service-title {
-        font-size: 1.15rem;
-        font-weight: 600;
-        color: #F0F6FC;
-        margin-bottom: 8px;
+    .service-card-wrapper:hover {
+        border-color: #F59E0B;
+        transform: translateY(-2px);
+    }
+    .service-card-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin-bottom: 14px;
     }
-    .service-desc {
-        font-size: 0.92rem;
+    .icon-ai { background: rgba(56, 189, 248, 0.15); color: #38BDF8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .icon-ledger { background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .icon-chart { background: rgba(63, 185, 80, 0.15); color: #3FB950; border: 1px solid rgba(63, 185, 80, 0.3); }
+    .icon-data { background: rgba(168, 85, 247, 0.15); color: #A855F7; border: 1px solid rgba(168, 85, 247, 0.3); }
+
+    .service-card-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #F0F6FC;
+        margin-bottom: 8px;
+    }
+    .service-card-desc {
+        font-size: 0.94rem;
         color: #8B949E;
-        line-height: 1.5;
-        margin-bottom: 16px;
+        line-height: 1.55;
+        margin-bottom: 20px;
     }
 
-    /* Buttons: Tactile, Recognizable, Distinct */
+    /* Buttons: Tactile, Recognizable, High Contrast */
     div.stButton > button {
-        background-color: #21262D !important;
+        background-color: #1A2230 !important;
         color: #F0F6FC !important;
-        border: 1px solid #30363D !important;
+        border: 1px solid #2E3A4E !important;
         border-radius: 6px !important;
-        font-size: 0.92rem !important;
+        font-size: 0.94rem !important;
         font-weight: 600 !important;
-        padding: 8px 18px !important;
+        padding: 9px 20px !important;
         cursor: pointer !important;
-        transition: background 0.15s ease, border-color 0.15s ease !important;
+        transition: all 0.15s ease !important;
     }
     div.stButton > button:hover {
-        background-color: #30363D !important;
+        background-color: #263347 !important;
         border-color: #8B949E !important;
         color: #FFFFFF !important;
     }
     div.stButton > button[kind="primary"] {
         background-color: #F59E0B !important;
-        color: #0D1117 !important;
+        color: #0B0E14 !important;
         border: 1px solid #D97706 !important;
         font-weight: 700 !important;
     }
@@ -192,32 +257,36 @@ st.markdown("""
         color: #FFFFFF !important;
     }
 
-    /* Metric Display */
-    div[data-testid="stMetricValue"] {
-        font-size: 1.85rem !important;
-        font-weight: 700 !important;
-        color: #F0F6FC !important;
+    /* Sidebar / Drawer Navigation Polish */
+    section[data-testid="stSidebar"] {
+        background-color: #0E131C !important;
+        border-right: 1px solid #222C3D !important;
     }
-    div[data-testid="stMetricLabel"] {
-        font-size: 0.85rem !important;
-        font-weight: 600 !important;
-        color: #8B949E !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.4px !important;
+    section[data-testid="stSidebar"] div[role="radiogroup"] label {
+        background: #141B26 !important;
+        border: 1px solid #222C3D !important;
+        border-radius: 8px !important;
+        padding: 10px 14px !important;
+        margin-bottom: 8px !important;
+        transition: all 0.15s ease !important;
+    }
+    section[data-testid="stSidebar"] div[role="radiogroup"] label:hover {
+        border-color: #F59E0B !important;
+        background: #1C2534 !important;
     }
 
     /* Inputs */
     div[data-baseweb="select"] > div, div[data-baseweb="input"] > div {
-        background-color: #0D1117 !important;
-        border: 1px solid #30363D !important;
+        background-color: #0E131C !important;
+        border: 1px solid #222C3D !important;
         border-radius: 6px !important;
         font-size: 0.95rem !important;
         color: #F0F6FC !important;
     }
 
-    /* Clean Tables */
+    /* Tables */
     div[data-testid="stDataFrame"] {
-        border: 1px solid #30363D !important;
+        border: 1px solid #222C3D !important;
         border-radius: 8px !important;
     }
 </style>
@@ -310,39 +379,39 @@ def ensure_ticker_data_available(symbol: str, exchange: str = "NSE", years: int 
 
 
 # -----------------------------------------------------------------------------
-# 1. TOP NAVIGATION HEADER
+# 1. TOP NAVBAR (HIGH-CONTRAST VISIBLE BRANDING & LOGIN)
 # -----------------------------------------------------------------------------
-col_brand, col_auth_action = st.columns([3.5, 1.5])
+col_nav_brand, col_nav_cta = st.columns([3.8, 1.2])
 
-with col_brand:
+with col_nav_brand:
     st.markdown("""
-    <div class="brand-title">
-        <span>📈 STOCK<span class="brand-accent">&</span>PREDICT</span>
-        <span style="font-size: 0.85rem; color: #8B949E; font-weight: 500;">| Institutional Equity Intelligence</span>
+    <div style="display: flex; align-items: center; gap: 12px; padding: 6px 0;">
+        <span class="brand-logo-badge">⚡ S&P</span>
+        <span class="brand-name">STOCK<span style="color: #F59E0B;">&</span>PREDICT</span>
+        <span class="brand-subtitle">Institutional Equity Intelligence</span>
     </div>
     """, unsafe_allow_html=True)
 
-with col_auth_action:
+with col_nav_cta:
     if st.session_state.authenticated:
-        st.write("")
-        c_name, c_btn = st.columns([2, 1])
-        c_name.markdown(f"<div style='text-align: right; padding-top: 6px; font-weight: 600; color: #F0F6FC;'>👤 {st.session_state.user_name}</div>", unsafe_allow_html=True)
-        if c_btn.button("Sign Out", use_container_width=True):
+        col_uname, col_logout = st.columns([1.5, 1])
+        col_uname.markdown(f"<div style='text-align: right; padding-top: 8px; font-weight: 600; color: #F0F6FC;'>👤 {st.session_state.user_name}</div>", unsafe_allow_html=True)
+        if col_logout.button("Sign Out", use_container_width=True):
             st.session_state.authenticated = False
             st.session_state.user_name = None
             st.session_state.user_role = "guest"
             st.session_state.view_mode = "HOME"
             st.rerun()
     else:
-        st.write("")
-        col_g1, col_g2 = st.columns([1, 1.2])
-        if col_g2.button("🔑 Login Portal", type="primary", use_container_width=True):
+        if st.button("🔑 Operator Login", type="primary", use_container_width=True):
             st.session_state.view_mode = "LOGIN"
             st.rerun()
 
+st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+
 
 # -----------------------------------------------------------------------------
-# 2. CONTINUOUS MARKET TICKER TAPE (INDICES & TOP EQUITIES)
+# 2. CONTINUOUS MARKET TICKER TAPE (INDICES & EQUITIES)
 # -----------------------------------------------------------------------------
 with get_ro_connection() as conn:
     df_ticker_tape = pd.read_sql_query("""
@@ -361,7 +430,7 @@ with get_ro_connection() as conn:
 tape_html = ['<div class="ticker-bar">']
 tape_html.append('<div class="ticker-item"><span class="ticker-name" style="color: #F59E0B;">NIFTY 50</span><span class="ticker-val">24,380.25</span><span class="delta-up">+0.62%</span></div>')
 tape_html.append('<div class="ticker-item"><span class="ticker-name" style="color: #F59E0B;">SENSEX</span><span class="ticker-val">80,120.40</span><span class="delta-up">+0.55%</span></div>')
-tape_html.append('<div class="ticker-item"><span class="ticker-name" style="color: #58A6FF;">USD/INR</span><span class="ticker-val">84.08</span><span class="delta-down">-0.04%</span></div>')
+tape_html.append('<div class="ticker-item"><span class="ticker-name" style="color: #38BDF8;">USD/INR</span><span class="ticker-val">84.08</span><span class="delta-down">-0.04%</span></div>')
 
 for _, row in df_ticker_tape.iterrows():
     sym = row["symbol"]
@@ -381,10 +450,10 @@ st.markdown("".join(tape_html), unsafe_allow_html=True)
 # -----------------------------------------------------------------------------
 if not st.session_state.authenticated:
     
-    # Check if Login Portal is clicked
+    # Login Modal/Portal View
     if st.session_state.view_mode == "LOGIN":
         st.markdown("### 🔑 **Operator Authentication Portal**")
-        st.caption("Sign in to access your quantitative models, predictive forecasting, and database audit tools.")
+        st.caption("Sign in to access quantitative models, predictive forecasting, and database audit tools.")
 
         tab_log, tab_reg = st.tabs(["Sign In to Existing Account", "Create New Analyst Account"])
 
@@ -392,12 +461,12 @@ if not st.session_state.authenticated:
             col_l1, col_l2 = st.columns([1.5, 2.5])
             with col_l1:
                 st.markdown("""
-                <div style="background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 20px;">
+                <div style="background: #121722; border: 1px solid #222C3D; border-radius: 8px; padding: 22px;">
                     <h5 style="margin-top:0; color: #F0F6FC;">Evaluation Demo Keys</h5>
                     <p style="color: #8B949E; font-size: 0.9rem;">Pre-configured administrative access:</p>
                     <div style="margin-bottom: 8px;">
                         <span style="color: #8B949E; font-size: 0.85rem;">Username:</span> 
-                        <code style="color: #58A6FF;">Admin</code>
+                        <code style="color: #38BDF8;">Admin</code>
                     </div>
                     <div>
                         <span style="color: #8B949E; font-size: 0.85rem;">Password:</span> 
@@ -442,31 +511,33 @@ if not st.session_state.authenticated:
 
         st.stop()
 
-    # Default Public Landing Page
+    # Hero Banner
     st.markdown("""
-    <div class="hero-box">
-        <h1 class="hero-headline">Institutional Indian Equity Forecasting & Verifiable Prediction Ledger</h1>
+    <div class="hero-container">
+        <div class="hero-badge">⚡ PRODUCTION QUANTITATIVE WORKSPACE</div>
+        <h1 class="hero-headline">Institutional Indian Equity Intelligence & Verifiable Prediction Ledger</h1>
         <p class="hero-subtext">
-            A high-performance quantitative platform for NSE and BSE equities. Evaluates machine learning models 
-            under zero look-ahead bias, seals predictions in an immutable PostgreSQL ledger, and benchmarks 
-            statistical scorecards as real market closing prices arrive.
+            Engineered from scratch for quantitative research desks. Evaluates neural network forecasts 
+            under zero look-ahead bias, seals predictions in an immutable PostgreSQL partition store, 
+            and grades directional accuracy against realized closing prices.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
-    # 4 Service Cards Grid with Direct Login Prompts
+    # 4 Visual Graphic Service Cards
     st.markdown("### 🛠️ **Platform Capabilities & Quantitative Services**")
-    st.caption("All institutional services operate under strict reproducibility and database-level immutability.")
+    st.caption("Each service operates under strict reproducibility guarantees and database-level immutability.")
 
     col_s1, col_s2 = st.columns(2)
     with col_s1:
         st.markdown("""
-        <div class="service-card">
+        <div class="service-card-wrapper">
             <div>
-                <div class="service-title">🤖 Predictive AI Forecasters (LSTM, ANN, Transformer)</div>
-                <div class="service-desc">
-                    Generates directional classifications and forward price projections across 6 distinct model architectures 
-                    with rolling technical features, self-attention mechanisms, and 80%/95% confidence intervals.
+                <div class="service-card-icon icon-ai">🤖</div>
+                <div class="service-card-title">Deep Learning & Attention Forecasters</div>
+                <div class="service-card-desc">
+                    LSTM recurrent sequences, 15-feature multi-layer perceptrons, temporal multi-head self-attention transformers, 
+                    and consensus meta-ensembles with 80% & 95% uncertainty confidence intervals.
                 </div>
             </div>
         </div>
@@ -477,12 +548,13 @@ if not st.session_state.authenticated:
 
     with col_s2:
         st.markdown("""
-        <div class="service-card">
+        <div class="service-card-wrapper">
             <div>
-                <div class="service-title">📜 Immutable Database Prediction Ledger</div>
-                <div class="service-desc">
-                    Every quantitative bet is permanently sealed into PostgreSQL before market cutoff. Database triggers 
-                    strictly prohibit UPDATE and DELETE statements, guaranteeing tamper-proof evaluation integrity.
+                <div class="service-card-icon icon-ledger">📜</div>
+                <div class="service-card-title">Immutable PostgreSQL Audit Ledger</div>
+                <div class="service-card-desc">
+                    All forecasts are committed prior to market observation cutoff. PostgreSQL triggers strictly 
+                    forbid UPDATE and DELETE operations, eliminating look-ahead bias and backtest over-fitting.
                 </div>
             </div>
         </div>
@@ -491,17 +563,18 @@ if not st.session_state.authenticated:
             st.session_state.view_mode = "LOGIN"
             st.rerun()
 
-    st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 16px;'></div>", unsafe_allow_html=True)
 
     col_s3, col_s4 = st.columns(2)
     with col_s3:
         st.markdown("""
-        <div class="service-card">
+        <div class="service-card-wrapper">
             <div>
-                <div class="service-title">⚡ Interactive Candlestick & Level-2 Depth Analytics</div>
-                <div class="service-desc">
-                    Deep financial exploration featuring daily OHLC candlestick charts, volume profiles, EMA-20/SMA-50 overlays, 
-                    and simulated Level-2 Bid/Ask orderbook ladders with basis-point spread telemetry.
+                <div class="service-card-icon icon-chart">⚡</div>
+                <div class="service-card-title">Financial Candlestick & Level-2 Depth</div>
+                <div class="service-card-desc">
+                    Daily OHLC candlestick charts with EMA-20/SMA-50 technical overlays, volume bars, and 
+                    simulated Level-2 bid/ask depth ladders with basis-point spread and slippage estimation.
                 </div>
             </div>
         </div>
@@ -512,12 +585,13 @@ if not st.session_state.authenticated:
 
     with col_s4:
         st.markdown("""
-        <div class="service-card">
+        <div class="service-card-wrapper">
             <div>
-                <div class="service-title">📥 Automated & Manual Market Data Ingestion</div>
-                <div class="service-desc">
-                    Continuous pipeline retrieving daily Indian equity ticks from Yahoo Finance with automated validation guardrails, 
-                    reject logging, and range-partitioned database storage across years 2015 to 2028.
+                <div class="service-card-icon icon-data">📥</div>
+                <div class="service-card-title">Partitioned Market Ingestion Hub</div>
+                <div class="service-card-desc">
+                    Continuous pipeline retrieving daily Indian equity ticks from Yahoo Finance with validation bounds 
+                    (High ≥ Low, Volume ≥ 0), reject logging, and yearly range-partitioning (2015–2028).
                 </div>
             </div>
         </div>
@@ -570,19 +644,21 @@ if not st.session_state.authenticated:
 
 
 # -----------------------------------------------------------------------------
-# 4. AUTHENTICATED WORKSTATION (HAMBURGER / DRAWER NAVIGATION)
+# 4. AUTHENTICATED WORKSTATION (POLISHED DRAWER NAVIGATION)
 # -----------------------------------------------------------------------------
-# Clean, intuitive navigation via Sidebar Hamburger Menu
 st.sidebar.markdown(f"""
-<div style="background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 14px; margin-bottom: 20px;">
-    <div style="font-size: 0.8rem; color: #8B949E; text-transform: uppercase; font-weight: 600;">Active Operator</div>
-    <div style="font-size: 1.1rem; font-weight: 700; color: #F0F6FC;">👤 {st.session_state.user_name}</div>
-    <div style="font-size: 0.78rem; color: #F59E0B; font-weight: 600;">ROLE: {st.session_state.user_role.upper()}</div>
+<div style="background: #141B26; border: 1px solid #222C3D; border-radius: 10px; padding: 16px; margin-bottom: 22px;">
+    <div style="font-size: 0.78rem; color: #8B949E; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Operator Session</div>
+    <div style="font-size: 1.15rem; font-weight: 800; color: #F0F6FC; margin: 4px 0;">👤 {st.session_state.user_name}</div>
+    <div style="display: flex; gap: 6px; align-items: center;">
+        <span style="background: rgba(63, 185, 80, 0.2); color: #3FB950; border: 1px solid rgba(63, 185, 80, 0.4); padding: 2px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 700; font-family: 'JetBrains Mono';">ACTIVE</span>
+        <span style="font-size: 0.76rem; color: #F59E0B; font-weight: 700;">{st.session_state.user_role.upper()}</span>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
 nav_choice = st.sidebar.radio(
-    "NAVIGATION MENU",
+    "WORKSPACE NAVIGATION",
     [
         "📊 Market Overview & Radar",
         "⚡ Stock Analytics & Orderbook",
@@ -668,18 +744,18 @@ if nav_choice == "📊 Market Overview & Radar":
     with col_macro:
         st.markdown("#### **Macro Indicators & Catalysts**")
         st.markdown("""
-        <div style="background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 18px;">
-            <div style="font-weight: 600; color: #F59E0B; margin-bottom: 10px;">Macro Economic Benchmarks</div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>RBI Repo Rate:</span><span style="color:#58A6FF; font-weight:600;">6.50%</span></div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>India 10Y Bond:</span><span style="color:#58A6FF; font-weight:600;">6.84%</span></div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>CPI Inflation:</span><span style="color:#3FB950; font-weight:600;">5.10%</span></div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;"><span>Brent Crude:</span><span style="color:#F85149; font-weight:600;">$74.20/bbl</span></div>
-            <hr style="border: none; border-bottom: 1px solid #30363D; margin: 12px 0;">
-            <div style="font-weight: 600; color: #F59E0B; margin-bottom: 8px;">Corporate Catalyst Feed</div>
-            <p style="font-size: 0.88rem; color: #8B949E; margin-bottom: 8px;">
+        <div style="background: #121722; border: 1px solid #222C3D; border-radius: 10px; padding: 20px;">
+            <div style="font-weight: 700; color: #F59E0B; margin-bottom: 12px; font-size: 0.95rem;">Macro Benchmarks</div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>RBI Repo Rate:</span><span style="color:#38BDF8; font-weight:700;">6.50%</span></div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>India 10Y Bond:</span><span style="color:#38BDF8; font-weight:700;">6.84%</span></div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;"><span>CPI Inflation:</span><span style="color:#3FB950; font-weight:700;">5.10%</span></div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 14px;"><span>Brent Crude:</span><span style="color:#F85149; font-weight:700;">$74.20/bbl</span></div>
+            <hr style="border: none; border-bottom: 1px solid #222C3D; margin: 14px 0;">
+            <div style="font-weight: 700; color: #F59E0B; margin-bottom: 10px; font-size: 0.95rem;">Corporate Catalyst Feed</div>
+            <p style="font-size: 0.88rem; color: #8B949E; margin-bottom: 10px; line-height: 1.5;">
                 <b style="color: #F0F6FC;">RELIANCE:</b> Q3 refining margin forecasts positive; capex guidance confirmed.
             </p>
-            <p style="font-size: 0.88rem; color: #8B949E; margin-bottom: 0;">
+            <p style="font-size: 0.88rem; color: #8B949E; margin-bottom: 0; line-height: 1.5;">
                 <b style="color: #F0F6FC;">TCS & INFY:</b> US banking deal wins rise +14% YoY; cloud renewal velocity strong.
             </p>
         </div>
@@ -749,7 +825,7 @@ elif nav_choice == "⚡ Stock Analytics & Orderbook":
                 x=df_sym_prices["price_date"],
                 y=df_sym_prices["EMA20"],
                 name="EMA 20",
-                line=dict(color="#58A6FF", width=1.4),
+                line=dict(color="#38BDF8", width=1.4),
             ), row=1, col=1)
 
             fig.add_trace(go.Scatter(
@@ -771,15 +847,15 @@ elif nav_choice == "⚡ Stock Analytics & Orderbook":
             fig.update_layout(
                 height=500,
                 margin=dict(l=10, r=10, t=10, b=10),
-                paper_bgcolor="#161B22",
-                plot_bgcolor="#0D1117",
-                font=dict(family="Inter", size=11, color="#8B949E"),
+                paper_bgcolor="#121722",
+                plot_bgcolor="#0B0E14",
+                font=dict(family="Public Sans", size=11, color="#8B949E"),
                 xaxis_rangeslider_visible=False,
                 hovermode="x unified",
             )
-            fig.update_yaxes(gridcolor="#30363D", row=1, col=1)
-            fig.update_yaxes(gridcolor="#30363D", row=2, col=1)
-            fig.update_xaxes(gridcolor="#30363D")
+            fig.update_yaxes(gridcolor="#222C3D", row=1, col=1)
+            fig.update_yaxes(gridcolor="#222C3D", row=2, col=1)
+            fig.update_xaxes(gridcolor="#222C3D")
 
             st.plotly_chart(fig, use_container_width=True)
 
@@ -801,20 +877,20 @@ elif nav_choice == "⚡ Stock Analytics & Orderbook":
             st.dataframe(pd.DataFrame(depth_rows), use_container_width=True, hide_index=True)
 
             st.markdown(f"""
-            <div style="background: #161B22; border: 1px solid #30363D; border-radius: 8px; padding: 14px; margin-top: 14px;">
-                <div style="font-weight: 600; color: #58A6FF; margin-bottom: 6px;">Execution Metrics</div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>Est. Slippage:</span><span style="color:#3FB950; font-weight:600;">0.024%</span></div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><span>Volatility (ATR-14):</span><span style="color:#F59E0B; font-weight:600;">₹{last_p*0.018:.2f} (1.8%)</span></div>
-                <div style="display: flex; justify-content: space-between;"><span>Liquidity Quality:</span><span style="color:#3FB950; font-weight:600;">Optimal (98.4/100)</span></div>
+            <div style="background: #121722; border: 1px solid #222C3D; border-radius: 10px; padding: 16px; margin-top: 16px;">
+                <div style="font-weight: 700; color: #38BDF8; margin-bottom: 8px;">Execution Telemetry</div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Est. Slippage:</span><span style="color:#3FB950; font-weight:700;">0.024%</span></div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Volatility (ATR-14):</span><span style="color:#F59E0B; font-weight:700;">₹{last_p*0.018:.2f} (1.8%)</span></div>
+                <div style="display: flex; justify-content: space-between;"><span>Liquidity Quality:</span><span style="color:#3FB950; font-weight:700;">Optimal (98.4/100)</span></div>
             </div>
             """, unsafe_allow_html=True)
     else:
         st.warning(f"No price history available in database for {active_sym}. Click 'Sync Market Data' to fetch it.")
 
 
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------
 # VIEW 3: PREDICTIVE AI FORECASTING
-# -----------------------------------------------------------------------------
+# -------------------------------------------------------------
 elif nav_choice == "🤖 Predictive AI Forecasting":
     st.markdown("### 🤖 **Predictive AI Forecasting Engine**")
 
@@ -883,7 +959,7 @@ elif nav_choice == "🤖 Predictive AI Forecasting":
             y=df_hist["close_price"].tail(30),
             mode="lines+markers",
             name="Recent Observed Close",
-            line=dict(color="#58A6FF", width=2.5),
+            line=dict(color="#38BDF8", width=2.5),
         ))
 
         model_palette = {
@@ -892,7 +968,7 @@ elif nav_choice == "🤖 Predictive AI Forecasting":
             "ann": "#FB923C",
             "lstm": "#3FB950",
             "transformer": "#A855F7",
-            "ensemble": "#38BDF8",
+            "ensemble": "#00E5FF",
         }
 
         proj_x = [last_date, last_date + datetime.timedelta(days=sel_h * 2)]
@@ -912,19 +988,19 @@ elif nav_choice == "🤖 Predictive AI Forecasting":
             y=[ens_pred["lower_bound"], ens_pred["upper_bound"]],
             mode="lines+markers",
             name="Ensemble Uncertainty Band",
-            line=dict(color="rgba(56, 189, 248, 0.6)", width=8),
+            line=dict(color="rgba(0, 229, 255, 0.6)", width=8),
         ))
 
         comp_fig.update_layout(
             height=440,
             margin=dict(l=10, r=10, t=10, b=10),
-            paper_bgcolor="#161B22",
-            plot_bgcolor="#0D1117",
-            font=dict(family="Inter", size=11, color="#8B949E"),
+            paper_bgcolor="#121722",
+            plot_bgcolor="#0B0E14",
+            font=dict(family="Public Sans", size=11, color="#8B949E"),
             hovermode="x unified",
         )
-        comp_fig.update_yaxes(gridcolor="#30363D")
-        comp_fig.update_xaxes(gridcolor="#30363D")
+        comp_fig.update_yaxes(gridcolor="#222C3D")
+        comp_fig.update_xaxes(gridcolor="#222C3D")
         st.plotly_chart(comp_fig, use_container_width=True)
 
         # Quantitative Metrics Table
