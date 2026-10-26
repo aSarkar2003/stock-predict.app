@@ -53,3 +53,23 @@ htmlcov/
 # Logs
 *.log
 
+# Local agent / assistant artifacts
+.agent/
+.agents/
+.claude/
+.codex/
+.cursor/
+.gemini/
+.qoder/
+.impeccable/
+impeccable-SKILL.md
+
+# OS & Temp files
+*.tmp
+*.temp
+*~
+
+DESIGN.md
+
+
+

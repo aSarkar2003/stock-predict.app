@@ -40,3 +40,4 @@
   - Service Capabilities Grid: 4 core service cards (Predictive AI Models, Immutable DB Ledger, Level-2 Orderbook Depth, Real-Time Data Ingestion), each with a direct "Access Service" login button.
   - Live Market Data Table: Top 10 Indian equities with clean pagination and standard column alignments.
   - Dedicated Authentication Portal: Clean, modern card with tabs for Login and Sign Up.
+
