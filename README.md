@@ -1,4 +1,4 @@
-# STOCK&PREDICT
+# STOCK&PREDICT - Stock Predictor Website
 
 [![Version](https://img.shields.io/badge/version-0.5.1-blue)](https://github.com/atanu-sarkar/stock-predict-app)
 [![Python](https://img.shields.io/badge/python-3.11-brightgreen)](https://www.python.org/)
